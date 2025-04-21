@@ -5,19 +5,27 @@ namespace TextRPG_Team25.Core
     internal class GameManager
     {
         // 싱글톤
-        private static GameManager instance;
+        public static GameManager instance;
         public static GameManager Instance => instance ??= new GameManager();
+        public Player player;
+        public Battle battle;
 
         // 초기화
         public void Initialize() 
-        {  
+        {
+            Console.WriteLine("플레이어의 이름을 입력하시오:");
+            Console.WriteLine(">> ");
+            string name = Console.ReadLine();
             
+            
+            player = new Player();
+            player.Name = name;
+            battle = new Battle(player);
         }
 
         // 게임 실행
         public void Run() 
         {
-            Initialize();
             ShowMainMenu();
         }
 
@@ -48,20 +56,7 @@ namespace TextRPG_Team25.Core
                     break;
             }
         }
-        
-        public void ShowStatus()
-        {
-            Console.Clear();
-            Console.ReadLine();
-            ShowMainMenu();
-        }
-
-        public void StartBattle()
-        {
-            Console.Clear();
-            Console.ReadLine();
-            ShowMainMenu();
-        }
+       
 
     }
 }
