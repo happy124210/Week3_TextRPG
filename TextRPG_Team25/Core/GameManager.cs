@@ -5,7 +5,7 @@ namespace TextRPG_Team25.Core
     internal class GameManager
     {
         // 싱글톤
-        public static GameManager instance;
+        private static GameManager instance;
         public static GameManager Instance => instance ??= new GameManager();
         public Player player;
         public Battle battle;
@@ -13,8 +13,8 @@ namespace TextRPG_Team25.Core
         // 초기화
         public void Initialize() 
         {
-            Console.WriteLine("플레이어의 이름을 입력하시오:");
-            Console.WriteLine(">> ");
+            Console.WriteLine("플레이어의 이름을 입력하시오.\n>> ");
+    
             string name = Console.ReadLine();
             
             
