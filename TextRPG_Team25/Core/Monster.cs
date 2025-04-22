@@ -1,5 +1,5 @@
 ﻿using System;
-
+using TextRPG_Team25;
 namespace TextRPG_Team25.Core
 {
 	public class Monster
@@ -10,7 +10,9 @@ namespace TextRPG_Team25.Core
 		public int attack;
 		public bool isLive;
 
-		
+		Player player = new Player();
+
+
         public Monster[] monsters = new Monster[3];
 		public List<Monster> FieldMonster = new List<Monster>(); 
 		
@@ -63,7 +65,13 @@ namespace TextRPG_Team25.Core
 			{
                 Console.WriteLine($"Lv.{FieldMonster[i].level}  {FieldMonster[i].name}  HP  {FieldMonster[i].hp}");
             }
-			
+            Console.WriteLine("");
+            Console.WriteLine("[내정보]");
+			Console.WriteLine($"Lv.{player.lv}  {player.name} ({player.job})");
+			Console.WriteLine($"HP {player.maxHp}/{player.hp}\n");
+			Console.WriteLine("0. 취소\n");
+			Console.WriteLine("대상을 선택해주세요.\n");
+			Console.WriteLine(">>");
 		}
 
 	}
