@@ -1,4 +1,5 @@
 ﻿using System;
+using TextRPG_Team25.Quest;
 
 namespace TextRPG_Team25.Core
 {
@@ -9,6 +10,7 @@ namespace TextRPG_Team25.Core
         public static GameManager Instance => instance ??= new GameManager();
         public Player player;
         public Battle battle;
+        public QuestManager questManager;
 
         // 초기화
         public void Initialize() 
@@ -21,6 +23,7 @@ namespace TextRPG_Team25.Core
             player = new Player();
             player.Name = name;
             battle = new Battle(player);
+            questManager = new QuestManager(player);
         }
 
         // 게임 실행
