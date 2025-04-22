@@ -1,61 +1,67 @@
 ﻿using System;
-using TextRPG_Team25.Core;
 
 namespace TextRPG_Team25.Core
 {
+    // Player 클래스: 플레이어 캐릭터의 상태 정보를 관리하는 클래스
     public class Player
     {
-        // =======================================
-        // Player 클래스: 플레이어 캐릭터의 상태 정보를 관리
-        // 7개 속성만 표시 (레벨/이름/직업/공격력/방어력/체력/Gold)
-        // 변수 이름은 소문자 시작 규칙 준수
-        // =======================================
+        // 캐릭터 이름
+        public string name { get; private set; }
 
-        public string name { get; private set; }    // 캐릭터 이름
-        public string job { get; private set; }     // 직업
-        public int level { get; private set; }      // 레벨
-        public int attack { get; private set; }     // 공격력
-        public int defense { get; private set; }    // 방어력
-        public int hp { get; set; }                 // 체력 (통합)
-        public int gold { get; private set; }       // 소지 금화
+        // 직업
+        public string job { get; private set; }
 
-        // 생성자: 초기 속성 설정
-        public Player(string name, string job, int level,
-                      int attack, int defense,
-                      int hp, int gold)
+        // 레벨
+        public int level { get; private set; }
+
+        // 공격력
+        public int attack { get; private set; }
+
+        // 방어력
+        public int defense { get; private set; }
+
+        // 최대 체력
+        public int maxhp { get; private set; }
+
+        // 현재 체력
+        public int hp { get; set; }
+
+        // 소지 금화
+        public int gold { get; private set; }
+
+        // 생성자: 초기 속성 설정 (hp 값을 maxhp와 현재 hp로 모두 설정)
+        public Player(string name, string job, int level, int attack, int defense, int hp, int gold)
         {
-            this.name = name;    // 이름 설정
-            this.job = job;     // 직업 설정
-            this.level = level;   // 레벨 설정
-            this.attack = attack;  // 공격력 설정
-            this.defense = defense; // 방어력 설정
-            this.hp = hp;      // 체력 설정
-            this.gold = gold;    // 금화 설정
+            this.name = name;
+            this.job = job;
+            this.level = level;
+            this.attack = attack;
+            this.defense = defense;
+            this.maxhp = hp;   // 생성 시 전달된 hp 값을 최대 체력으로 설정
+            this.hp = hp;      // 현재 체력도 동일하게 초기화
+            this.gold = gold;
         }
 
-        // 상태 보기 메서드: 7개 속성만 출력
+        // 플레이어 상태 보기: hp를 우선 사용하여 7개 속성을 콘솔에 출력하고, '0' 입력 시 종료
         public void ShowStatus()
         {
             while (true)
             {
                 Console.Clear();
                 Console.WriteLine("상태 보기\n");
-
-                // 필수 속성 출력
                 Console.WriteLine($"Lv.{level:D2}");
                 Console.WriteLine($"{name} ( {job} )");
                 Console.WriteLine($"공격력 : {attack}");
                 Console.WriteLine($"방어력 : {defense}");
                 Console.WriteLine($"체력 : {hp}");
                 Console.WriteLine($"Gold : {gold} G\n");
-
                 Console.WriteLine("0. 나가기\n");
-                Console.Write("  >> ");
+                Console.Write(">> ");
 
-                if (Console.ReadLine() == "0")
+                var input = Console.ReadLine();
+                if (input == "0")
                     break;
 
-                // 잘못된 입력 처리
                 Console.WriteLine("잘못된 입력입니다");
                 Console.WriteLine("계속하려면 아무 키나 누르세요...");
                 Console.ReadKey();
