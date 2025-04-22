@@ -6,6 +6,7 @@ namespace TextRPG_Team25
     internal class Battle(Player player)
     {
         Utils utils = new Utils();
+        Monster monster = new Monster();
 
         private void PlayerAttack(Monster selected)
         {
@@ -40,7 +41,9 @@ namespace TextRPG_Team25
                 Console.WriteLine($"HP {currentHp}-> HP {selected.HP}");
             }
 
-            
+  
         }
+
+        public void StartBattle() { }
     }
 }
