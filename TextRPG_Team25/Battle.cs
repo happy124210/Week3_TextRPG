@@ -44,14 +44,14 @@ namespace TextRPG_Team25
   
         }
 
-        private void SpawnEnemy()
+        private void SpawnEnemy() // 몬스터 소환
         {
             Random rand = new Random();
             int spawnNum = rand.Next(1, 4);
-            RanMonster(spawnNum);
+            RanMonsterSpawn(spawnNum);
         }
 
-        private void RanMonster(int spawnNum)
+        private void RanMonsterSpawn(int spawnNum) // 랜덤 몬스터 소환
         {
             Random rand = new Random();
             for (int i = 0; i < spawnNum; i++)
@@ -61,9 +61,13 @@ namespace TextRPG_Team25
             }
         }
 
-        public void StartBattle() 
+        public void StartBattle() // 배틀 시작
         {
-
+            SpawnEnemy();
+            for(int i = 0; i < monster.FieldMonster.Count; i++)
+            {
+                Console.WriteLine($"Lv.{monster.FieldMonster[i].level}  {monster.FieldMonster[i].name}  HP  {monster.FieldMonster[i].hp}");
+            }
 
             Console.WriteLine("");
             Console.WriteLine("[내정보]");
@@ -74,6 +78,15 @@ namespace TextRPG_Team25
             Console.WriteLine(">>");
         }
 
+        public void SelectTarget() // 타겟 몬스터 지정
+        {
+            string input = Console.ReadLine();
+            int num = int.Parse(input);
+            if(num > monster.FieldMonster.count || num < 0 || !monster.FieldMonster[num].isLive)
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+        }
 
     }
 }
