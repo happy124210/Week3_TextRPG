@@ -27,7 +27,17 @@ namespace TextRPG_Team25
             while (_isBattle)
             {
                 Console.Clear();
-
+                int deadNum = 0;                              //검사 진행을 위한 변수
+                //몬스터 전원 처치 확인
+                for(int i = 0; i < fieldMonsters.Count; i++)
+                {
+                    if (fieldMonsters[i].isDead) deadNum++;
+                }
+                if(deadNum == fieldMonsters.Count)
+                {
+                    _isBattle = false;
+                    break;
+                }
                 // 메세지 출력
                 for (int i = 0; i < fieldMonsters.Count; i++)
                 {
