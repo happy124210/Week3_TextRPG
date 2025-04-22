@@ -57,7 +57,7 @@ namespace TextRPG_Team25
             for (int i = 0; i < spawnNum; i++)
             {
                 int num = rand.Next(0, 3);
-                monster.FieldMonster.Add(monsters[num]);
+                monster.FieldMonster.Add(monster[num]);
             }
         }
 
@@ -71,7 +71,7 @@ namespace TextRPG_Team25
 
             Console.WriteLine("");
             Console.WriteLine("[내정보]");
-            Console.WriteLine($"Lv.{player.lv}  {player.name} ({player.job})");
+            Console.WriteLine($"Lv.{player.level}  {player.name} ({player.job})");
             Console.WriteLine($"HP {player.maxHp}/{player.hp}\n");
             Console.WriteLine("0. 취소\n");
             Console.WriteLine("대상을 선택해주세요.\n");
