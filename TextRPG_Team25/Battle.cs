@@ -14,7 +14,6 @@ namespace TextRPG_Team25
         }
         public void MonsterAttackWindow()
         {
-            Console.WriteLine($"Lv.{FieldMonster[battleMonster].level} {FieldMonster[battleMonster].name} 의 공격!");
             Console.WriteLine($"Lv.{player.level} {player.name}을(를) 맞췄습니다.");
             Console.WriteLine();
             Console.WriteLine($"Lv.{player.level} {player.name}");
@@ -36,6 +35,7 @@ namespace TextRPG_Team25
                         if (randomDmg <= 10) 
                         { 
                         double i = FieldMonster[battleMonster].attack; i = i * 90 / 100; monsterDmg = Math.Round(i);  //10퍼센트 확률로 90퍼센트의 데미지 반올림
+                        Console.WriteLine($"Lv.{FieldMonster[battleMonster].level} {FieldMonster[battleMonster].name} 의 공격!");
                         MonsterAttackWindow();
                         Console.WriteLine(BattleHP -monsterDmg);
                         Console.WriteLine($"받은 피해 : {monsterDmg}");// 플레이어가 받은피해와 플레이어 체력 출력;
@@ -44,6 +44,7 @@ namespace TextRPG_Team25
                     else if (randomDmg >= 90) 
                         { 
                         double i = FieldMonster[battleMonster].attack; i = i * 90 / 100; monsterDmg = Math.Round(i);  //10퍼센트의 확률로 110퍼센트의 데미지 반올림
+                        Console.WriteLine($"Lv.{FieldMonster[battleMonster].level} {FieldMonster[battleMonster].name} 의 공격!");
                         MonsterAttackWindow();
                         Console.WriteLine(BattleHP - monsterDmg);
                         Console.WriteLine($"받은 피해 : {monsterDmg}");// 플레이어가 받은피해와 플레이어 체력 출력
@@ -52,6 +53,7 @@ namespace TextRPG_Team25
                     else
                         {
                         double i = FieldMonster[battleMonster].attack = monsterDmg;
+                        Console.WriteLine($"Lv.{FieldMonster[battleMonster].level} {FieldMonster[battleMonster].name} 의 공격!");
                         MonsterAttackWindow();
                         Console.WriteLine(BattleHP - monsterDmg);
                         Console.WriteLine($"받은 피해 : {monsterDmg}");// 플레이어가 받은피해와 플레이어 체력 출력
