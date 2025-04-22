@@ -10,7 +10,7 @@ namespace TextRPG_Team25.Core
 		public int attack;
 		public bool isLive;
 
-		Player player = new Player();
+		public Player player;
 
 
         public Monster[] monsters = new Monster[3];
