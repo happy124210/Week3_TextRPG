@@ -8,7 +8,7 @@ namespace TextRPG_Team25.Core
 		public int level;
 		public int hp;
 		public int attack;
-		public bool isDead;
+		public bool isLive;
 
 		public Player player;
 
@@ -26,19 +26,19 @@ namespace TextRPG_Team25.Core
 			monsters[0].level = 2;
 			monsters[0].hp = 15;
 			monsters[0].attack = 5;
-            monsters[0].isDead = false;
+            monsters[0].isLive = true;
 
             monsters[1].name = "공허충";
             monsters[1].level = 3;
             monsters[1].hp = 10;
             monsters[1].attack = 9;
-            monsters[1].isDead = false;
+            monsters[1].isLive = true;
 
             monsters[2].name = "대포미니언";
             monsters[2].level = 25;
             monsters[2].hp = 25;
             monsters[2].attack = 8;
-            monsters[2].isDead = false;
+            monsters[2].isLive = true;
 
         }
 
@@ -77,7 +77,7 @@ namespace TextRPG_Team25.Core
 
 		public void Attack(Player player) // 몬스터 공격 메소드
 		{
-			if(isDead)
+			if(!isLive)
 			{
 				return;
 			}
@@ -89,7 +89,7 @@ namespace TextRPG_Team25.Core
 		}
 		public void TakeDamage(int dmg)
 		{
-            if (isDead)
+            if (!isLive)
             {
                 return;
             }
@@ -97,7 +97,7 @@ namespace TextRPG_Team25.Core
 			if(hp <= 0)
 			{
 				hp = 0;
-				isDead = true;
+				isLive = true;
 			}
         }
     }
