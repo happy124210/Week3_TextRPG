@@ -13,11 +13,9 @@ namespace TextRPG_Team25.Core
         // 초기화
         public void Initialize() 
         {
-            Console.WriteLine("플레이어의 이름을 입력하시오.\n>> ");
-    
+            Console.Write("플레이어의 이름을 입력하세요.\n>> ");
             string name = Console.ReadLine();
-            
-            
+ 
             player = new Player();
             player.name = name;
             battle = new Battle(player);
@@ -32,31 +30,37 @@ namespace TextRPG_Team25.Core
         // 메인 메뉴
         public void ShowMainMenu() 
         {
-            Console.Clear();
-            Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
-            Console.WriteLine("이제 전투를 시작할 수 있습니다.\n");
-            Console.WriteLine("1. 상태 보기");
-            Console.WriteLine("2. 전투 시작\n");
-            Console.Write("원하시는 행동을 입력해주세요.\n>> ");
-
-            string input = Console.ReadLine();
-
-            switch (input)
+            while (true)
             {
-                case "1":
-                    player.ShowStatus();
-                    break;
-                case "2":
-                    battle.StartBattle();
-                    break;
-                default:
-                    Console.WriteLine("\n잘못된 입력입니다.");
-                    Console.ReadLine();
-                    ShowMainMenu();
-                    break;
+                Console.Clear();
+                Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
+                Console.WriteLine("이제 전투를 시작할 수 있습니다.\n");
+                Console.WriteLine("1. 상태 보기");
+                Console.WriteLine("2. 전투 시작");
+                Console.WriteLine("0. 게임 종료\n");
+                Console.Write("원하시는 행동을 입력해주세요.\n>> ");
+
+                string input = Console.ReadLine();
+
+            
+                switch (input)
+                {
+                    case "1":
+                        player.ShowStatus();
+                        break;
+                    case "2":
+                        battle.StartBattle();
+                        break;
+                    case "0":
+                        Console.WriteLine("\n게임을 종료합니다.");
+                        Console.ReadKey();
+                        return;
+                    default:
+                        Console.WriteLine("\n잘못된 입력입니다.");
+                        Console.ReadKey();
+                        break;
+                }
             }
         }
-       
-
     }
 }
