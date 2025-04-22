@@ -52,7 +52,7 @@ namespace TextRPG_Team25
                     }
                     else
                         {
-                        double i = FieldMonster[battleMonster].attack = monsterDmg;
+                        monsterDmg = FieldMonster[battleMonster].attack;
                         Console.WriteLine($"Lv.{FieldMonster[battleMonster].level} {FieldMonster[battleMonster].name} 의 공격!");
                         MonsterAttackWindow();
                         Console.WriteLine(BattleHP - monsterDmg);
