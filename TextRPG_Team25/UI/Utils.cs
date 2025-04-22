@@ -2,7 +2,7 @@
 {
     internal class Utils
     {
-        // 글자 색 바꾸기 ex) Utils.ColoredText("메인 메뉴", ConsoleColor.DarkRed);
+        // 글자 색 바꾸기 ex) Utils.ColoredText("메인 메뉴\n", ConsoleColor.DarkRed);
         public static void ColoredText(string text, ConsoleColor color)
         {
             Console.ForegroundColor = color;

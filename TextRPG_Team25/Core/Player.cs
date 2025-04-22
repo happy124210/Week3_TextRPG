@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace TextRPG_Team25.Core
 {
@@ -37,12 +37,12 @@ namespace TextRPG_Team25.Core
             this.level = level;
             this.attack = attack;
             this.defense = defense;
-            this.maxhp = hp;   // 생성 시 전달된 hp 값을 최대 체력으로 설정
-            this.hp = hp;      // 현재 체력도 동일하게 초기화
+            this.maxhp = hp;
+            this.hp = hp;
             this.gold = gold;
         }
 
-        // 플레이어 상태 보기: hp를 우선 사용하여 7개 속성을 콘솔에 출력하고, '0' 입력 시 종료
+        // 플레이어 상태 보기: hp와 maxhp를 표시하고, '0' 입력 시 종료
         public void ShowStatus()
         {
             while (true)
@@ -53,7 +53,7 @@ namespace TextRPG_Team25.Core
                 Console.WriteLine($"{name} ( {job} )");
                 Console.WriteLine($"공격력 : {attack}");
                 Console.WriteLine($"방어력 : {defense}");
-                Console.WriteLine($"체력 : {hp}");
+                Console.WriteLine($"체력 : {hp} / {maxhp}");
                 Console.WriteLine($"Gold : {gold} G\n");
                 Console.WriteLine("0. 나가기\n");
                 Console.Write(">> ");
