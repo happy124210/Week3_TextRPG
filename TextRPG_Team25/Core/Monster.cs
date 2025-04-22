@@ -42,7 +42,7 @@ namespace TextRPG_Team25.Core
 
         }
 
-
+        /* battle 클래스에 해당 내용 추가
 		public void RanMonster(int spawnNum)
 		{
             Random rand = new Random();
@@ -73,6 +73,19 @@ namespace TextRPG_Team25.Core
 			Console.WriteLine("대상을 선택해주세요.\n");
 			Console.WriteLine(">>");
 		}
+		*/
 
-	}
+		public void Attack() // 몬스터 공격 메소드
+		{
+			if(!isLive)
+			{
+				return;
+			}
+			player.hp -= attack;
+			if(player.hp <= 0)
+			{
+				//배틀종료
+			}
+		}
+    }
 }
