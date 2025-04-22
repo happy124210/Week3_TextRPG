@@ -1,4 +1,7 @@
-﻿using TextRPG_Team25.Core;
+﻿using System.Numerics;
+using System.Threading;
+using TextRPG_Team25.Core;
+using TextRPG_Team25.UI;
 
 namespace TextRPG_Team25
 {
@@ -8,17 +11,23 @@ namespace TextRPG_Team25
         {
            if (isVictory)
            {
-                Console.WriteLine("Victory!");
-                Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
+                Utils.ColoredText("Battle! -Result-", ConsoleColor.DarkYellow);
+                Utils.ColoredText("Victory!", ConsoleColor.Green);
+                Console.WriteLine("던전에서 몬스터 ");
+                Utils.ColoredText($"{monster.Count}", ConsoleColor.Red);
+                Console.WriteLine("마리를 잡았습니다.");
                 return;
            }
 
             else
             {
-                Console.WriteLine("You Lose...");
-                Console.WriteLine($"Lv.{player.level} {player.name}");
-                Console.WriteLine($"{previousHP} → 0");
-                return;
+                Utils.ColoredText("Battle! -Result-", ConsoleColor.DarkYellow);
+                Utils.ColoredText("You Lose . . .", ConsoleColor.Magenta);
+                Console.WriteLine("Lv. ");
+                Utils.ColoredText($"{player.level} ", ConsoleColor.Red);
+                Utils.ColoredText($"{player.name}", ConsoleColor.Yellow);
+                Console.WriteLine($"HP {previousHP} → ");
+                Utils.ColoredText("0", ConsoleColor.Red);
             }
         }
     }
