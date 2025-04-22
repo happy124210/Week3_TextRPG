@@ -44,6 +44,36 @@ namespace TextRPG_Team25
   
         }
 
-        public void StartBattle() { }
+        private void SpawnEnemy()
+        {
+            Random rand = new Random();
+            int spawnNum = rand.Next(1, 4);
+            RanMonster(spawnNum);
+        }
+
+        private void RanMonster(int spawnNum)
+        {
+            Random rand = new Random();
+            for (int i = 0; i < spawnNum; i++)
+            {
+                int num = rand.Next(0, 3);
+                monster.FieldMonster.Add(monsters[num]);
+            }
+        }
+
+        public void StartBattle() 
+        {
+
+
+            Console.WriteLine("");
+            Console.WriteLine("[내정보]");
+            Console.WriteLine($"Lv.{player.lv}  {player.name} ({player.job})");
+            Console.WriteLine($"HP {player.maxHp}/{player.hp}\n");
+            Console.WriteLine("0. 취소\n");
+            Console.WriteLine("대상을 선택해주세요.\n");
+            Console.WriteLine(">>");
+        }
+
+
     }
 }
