@@ -7,7 +7,7 @@ namespace TextRPG_Team25
 {
     internal class Battle(Player player)
     {
-        public void MonsterAttack(Player.player, List<Monster> FieldMonster)
+        public void MonsterAttack(Player player, List<Monster> FieldMonster)
         {
             Random rand = new Random();
 
