@@ -29,7 +29,7 @@ namespace TextRPG_Team25
             {
                 int randomDmg = new Random().Next(1, 101);
 
-                if (MonsterList[i].MonsterDead == true) { randomDmg = 0; }
+                if (monster.hp <= 0) { randomDmg = 0; }
 
                     else
                     {
