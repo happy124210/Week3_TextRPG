@@ -30,9 +30,10 @@
                 Console.WriteLine($"Gold : {gold} G\n");
 
                 Console.WriteLine("0. 나가기\n");
-                Console.Write("  >> ");
+                Console.Write(">> ");
 
-                if (Console.ReadLine() == "0")
+                string input = Console.ReadLine();
+                if (input == "0")
                     break;
 
                 // 잘못된 입력 처리

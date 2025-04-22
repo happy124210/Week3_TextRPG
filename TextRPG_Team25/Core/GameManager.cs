@@ -19,7 +19,7 @@ namespace TextRPG_Team25.Core
             
             
             player = new Player();
-            player.Name = name;
+            player.name = name;
             battle = new Battle(player);
         }
 
@@ -44,10 +44,10 @@ namespace TextRPG_Team25.Core
             switch (input)
             {
                 case "1":
-                    ShowStatus();
+                    player.ShowStatus();
                     break;
                 case "2":
-                    StartBattle();
+                    battle.StartBattle();
                     break;
                 default:
                     Console.WriteLine("\n잘못된 입력입니다.");
