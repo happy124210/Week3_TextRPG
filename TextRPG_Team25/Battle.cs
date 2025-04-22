@@ -7,62 +7,35 @@ namespace TextRPG_Team25
 {
     internal class Battle(Player player)
     {
-        public double BattleHP { get; set; } 
-        public void Battlehp(double battlehp)
+        public void MonsterAttack(Player.player, List<Monster> FieldMonster)
         {
-            battlehp = player.hp;
-        }
-        public void MonsterAttackWindow()
-        {
-            Console.WriteLine($"Lv.{player.level} {player.name}을(를) 맞췄습니다.");
-            Console.WriteLine();
-            Console.WriteLine($"Lv.{player.level} {player.name}");
-            Console.Write($"HP {BattleHP} -> "); // 플레이어가 받은피해와 플레이어 체력 출력
-        }
-        public void MonsterAttack()
-        {
-            
-            double monsterDmg;
+            Random rand = new Random();
 
-            for (int battleMonster = 0; battleMonster <= FieldMonster.Count; battleMonster++)  //랜덤으로 생성된 적 개체수만큼 실행
+            foreach (Monster monster in FieldMonster)
             {
-                int randomDmg = new Random().Next(1, 101);
+                if (monster.isDead) continue; //몬스터의 is Dead의 bool값이 활성화 되있으면 해당 과정은 넘기기
 
-                if (monster.hp <= 0) { randomDmg = 0; } //필드 몬스터의 체력이 0이면 데미지 0으로 설정
+                //기본공격 10% 랜덤 오차계산
+                int offset = (int)Math.Ceiling(monster.attack * 0.1f);
+                int damage = rand.Next(monster.attack - offset, monster.attack + offset + 1);
 
-                    else
-                    {
-                        if (randomDmg <= 10) 
-                        { 
-                        double i = FieldMonster[battleMonster].attack; i = i * 90 / 100; monsterDmg = Math.Round(i);  //10퍼센트 확률로 90퍼센트의 데미지 반올림
-                        Console.WriteLine($"Lv.{FieldMonster[battleMonster].level} {FieldMonster[battleMonster].name} 의 공격!");
-                        MonsterAttackWindow();
-                        Console.WriteLine(BattleHP -monsterDmg);
-                        Console.WriteLine($"받은 피해 : {monsterDmg}");// 플레이어가 받은피해와 플레이어 체력 출력;
-                        BattleHP -= monsterDmg; //위의 랜덤공격력으로 플레이어 HP감소
-                       }
-                    else if (randomDmg >= 90) 
-                        { 
-                        double i = FieldMonster[battleMonster].attack; i = i * 90 / 100; monsterDmg = Math.Round(i);  //10퍼센트의 확률로 110퍼센트의 데미지 반올림
-                        Console.WriteLine($"Lv.{FieldMonster[battleMonster].level} {FieldMonster[battleMonster].name} 의 공격!");
-                        MonsterAttackWindow();
-                        Console.WriteLine(BattleHP - monsterDmg);
-                        Console.WriteLine($"받은 피해 : {monsterDmg}");// 플레이어가 받은피해와 플레이어 체력 출력
-                        BattleHP -= monsterDmg; //위의 랜덤공격력으로 플레이어 HP감소
-                    }
-                    else
-                        {
-                        monsterDmg = FieldMonster[battleMonster].attack;
-                        Console.WriteLine($"Lv.{FieldMonster[battleMonster].level} {FieldMonster[battleMonster].name} 의 공격!");
-                        MonsterAttackWindow();
-                        Console.WriteLine(BattleHP - monsterDmg);
-                        Console.WriteLine($"받은 피해 : {monsterDmg}");// 플레이어가 받은피해와 플레이어 체력 출력
-                        BattleHP -= monsterDmg; //위의 랜덤공격력으로 플레이어 HP감소
-                        }
-                    }
-            if (BattleHP <= 0) { battleMonster = FieldMonster[battleMonster].Count + 1; } //플레이어의 전투HP가 0이되면 for문에서 빠져나가기
+                //로그
+                Console.WriteLine($"\n Lv.{monster.level} {monster.name} 의 공격!");
+                Console.WriteLine($"{player.name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                Console.WriteLine();
+                Console.WriteLine($"Lv.{player.level} {player.name}");
+                Console.WriteLine($"HP {player.hp} -> {Math.Max(player.hp - damage, 0)}"); //Math.Max로 더 큰 값 출력 player의 HP가 0아래로 떨어졌을때 0을 띄우기 위함
+                Console.WriteLine();
+
+                //체력 감소
+                player.hp -= damage;
+                if (player.hp == 0) { Console.WriteLine($"{player.name} 이(가) 쓰러졌습니다......"); break; } //플레이어 패배
+
             }
+            Console.WriteLine("진행 하시려면 아무숫자나 입력해주세요");
+            Console.WriteLine();
+            Console.WriteLine("대상을 선택해 주세요.");
+            Console.ReadLine();
         }
-
     }
 }
