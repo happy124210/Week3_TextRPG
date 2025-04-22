@@ -1,4 +1,5 @@
 ﻿using TextRPG_Team25.UI;
+using TextRPG_Team25.Core;
 
 namespace TextRPG_Team25
 {
