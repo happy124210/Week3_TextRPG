@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace TextRPG_Team25
 {
-    internal class Battle
+    internal class Battle(Monster monster)
     {
         public double BattleHP { get; set; }
         public void Battlehp(double battlehp)
