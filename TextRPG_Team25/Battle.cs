@@ -7,7 +7,7 @@ namespace TextRPG_Team25
 {
     internal class Battle(MonsterAttack monsterAttack)
     {
-        public double BattleHP { get; set; }
+        public double BattleHP { get; set; } 
         public void Battlehp(double battlehp)
         {
             battlehp = player.hp;
@@ -28,7 +28,7 @@ namespace TextRPG_Team25
             {
                 int randomDmg = new Random().Next(1, 101);
 
-                if (monster.hp <= 0) { randomDmg = 0; }
+                if (monster.hp <= 0) { randomDmg = 0; } //필드 몬스터의 체력이 0이면 데미지 0으로 설정
 
                     else
                     {
@@ -60,7 +60,7 @@ namespace TextRPG_Team25
                         BattleHP -= monsterDmg; //위의 랜덤공격력으로 플레이어 HP감소
                         }
                     }
-            if (BattleHP <= 0) { battleMonster = FieldMonster[battleMonster].Count + 1; } //플레이어의 전투HP가 0이되면 for문에서 
+            if (BattleHP <= 0) { battleMonster = FieldMonster[battleMonster].Count + 1; } //플레이어의 전투HP가 0이되면 for문에서 빠져나가기
             }
         }
 
