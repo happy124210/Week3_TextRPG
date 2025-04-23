@@ -60,7 +60,7 @@
             Console.ReadKey();
         }
 
-        public void EquipManage()
+        public void EquipmentManage()
         {
             Console.WriteLine("장착하거나 해제 하실 장비를 선택하세요");
             string inputNum = Console.ReadLine();
@@ -74,14 +74,14 @@
                 Console.WriteLine("메인화면으로 돌아갑니다.");
                 Console.ReadKey();
             }
-            if (inventory[input-1].type == ItemType.portion)
+            if (inventory[input - 1].type == ItemType.Potion)
             {
                 Console.WriteLine("포션은 장착하거나 해제할 수 없습니다.");
                 Console.ReadKey();
             }
             else
             {
-                inventory[input - 1].EquipItem();
+                inventory[input - 1].EquipmentItem();
             }
         }
 
