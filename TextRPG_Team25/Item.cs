@@ -19,6 +19,7 @@ namespace TextRPG_Team25
         //public bool hasItem  인벤토리 관련 리스트 작성 시 사용 현재 보류
         Player player;
 
+        public Item() { }
         public Item(string newName, int newEff, ItemType newType, bool newIsEquip)
         {
             name = newName;
@@ -66,6 +67,45 @@ namespace TextRPG_Team25
                     player.hp += eff;
                     break;
             }
+        }
+        public void ShowItem()
+        {
+            string itemName = "";
+            switch (type)
+            {
+                case ItemType.atKEquip:
+                    itemName = "공격력";
+                    break;
+                case ItemType.defEquip:
+                    itemName = "방어력";
+                    break;
+                case ItemType.portion:
+                    itemName = "포션";
+                    break;
+            }
+
+            if (isEquip)
+            {
+                Console.WriteLine($"[장착중] {name}   {itemName} : +{eff}");
+            }
+            else
+            {
+                Console.WriteLine($"{name}   {itemName} : +{eff}");
+            }
+
+
+        }
+
+        public static Item AddItem(int index)
+        {
+            Item addItem = items[index];
+            return new Item
+            {
+                name = addItem.name,
+                eff = addItem.eff,
+                type = addItem.type,
+                isEquip = addItem.isEquip
+            };
         }
     }
 }

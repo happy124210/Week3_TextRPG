@@ -43,31 +43,45 @@
             }
         }
 
-        public void ShowInventory()
+        public void ShowInventory()  //인벤토리 보기
         {
             Console.Clear();
             for(int i = 0; i < inventory.Count; i++)
             {
-                var item = inventory[i];
-                switch (item.type)
-                {
-                    case ItemType.atKEquip:break;
-                    case ItemType.defEquip: break;
-                    case ItemType.portion: break;
-                }
-                Console.WriteLine($"{item.name}");
+                inventory[i].ShowItem();
             }
-            //인벤토리 보기
+            Console.WriteLine("계속하려면 아무 키나 누르세요...");
+            Console.ReadKey();
         }
 
         public void EquipManage()
         {
-            //장비 장착 관리
+            Console.WriteLine("장착하거나 해제 하실 장비를 선택하세요");
+            string inputNum = Console.ReadLine();
+            if(!int.TryParse(inputNum, out int input))
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+                Console.ReadKey();
+            }
+            if (input == 0) 
+            {
+                Console.WriteLine("메인화면으로 돌아갑니다.");
+                Console.ReadKey();
+            }
+            if (inventory[input-1].type == ItemType.portion)
+            {
+                Console.WriteLine("포션은 장착하거나 해제할 수 없습니다.");
+                Console.ReadKey();
+            }
+            else
+            {
+                inventory[input - 1].EquipItem();
+            }
         }
 
-        public void AddInventory()
+        public void AddInventory(int index) // 아이템 획득 시 실행
         {
-            //아이템 추가 배틀에서 관리 시 삭제
+            inventory.Add(Item.AddItem(index));
         }
     }
 }
