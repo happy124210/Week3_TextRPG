@@ -14,6 +14,7 @@
         // 상태 보기 메서드: 7개 속성만 출력
 
         internal List<Item> inventory = new List<Item>();
+        
         public void ShowStatus()
         {
             while (true)
@@ -46,6 +47,11 @@
         public void ShowInventory()  //인벤토리 보기
         {
             Console.Clear();
+
+            // 테스트용 임시 아이템
+            AddInventory(0);
+            AddInventory(1);
+
             for(int i = 0; i < inventory.Count; i++)
             {
                 inventory[i].ShowItem();
