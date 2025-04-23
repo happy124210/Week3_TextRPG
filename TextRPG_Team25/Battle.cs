@@ -102,7 +102,7 @@ namespace TextRPG_Team25
 
         private void PlayerPhase(Monster selected)
         {
-            if (IsEvasion()) { Console.WriteLine("공격을 회피했습니다"); } //공격 성공 여부 판단
+            if (IsEvasion()) { Console.WriteLine($"{selected.name} 이(가) 공격을 회피했습니다"); } //공격 성공 여부 판단
             else //공격 성공시
             {
 
@@ -125,7 +125,8 @@ namespace TextRPG_Team25
                 }
                 Console.WriteLine("몬스터 턴으로 이동합니다.");
                 Console.ReadKey();
-            }   }
+            }   
+        }
 
         private void MonsterPhase()
         {
