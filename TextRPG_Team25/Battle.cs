@@ -1,5 +1,7 @@
 ﻿using TextRPG_Team25.UI;
 using TextRPG_Team25.Core;
+using System.Threading;
+using System;
 namespace TextRPG_Team25
 {
     internal class Battle(Player player)
@@ -102,25 +104,30 @@ namespace TextRPG_Team25
 
         private void PlayerPhase(Monster selected)
         {
-            int baseAttack = player.attack;
-            int currentMonsterHp = selected.hp;
-            int offset = (int)Math.Ceiling(baseAttack * 0.1f);
-            int damage = _random.Next(baseAttack - offset, baseAttack + offset + 1);
-
-            selected.hp -= damage;
-
-            Console.WriteLine($"\n{player.name}의 공격!");
-            Console.WriteLine($"{selected.name}을 맞췄습니다. [데미지 : {damage}]");
-            Console.WriteLine($"HP {currentMonsterHp} → {(selected.hp > 0 ? selected.hp.ToString() : "Dead")}");
-
-            if (selected.hp <= 0)
+            if (IsEvasion()) { Console.WriteLine("공격을 회피했습니다"); } //공격 성공 여부 판단
+            else //공격 성공시
             {
-                selected.hp = 0;
-                selected.isDead = true;
-            }
-            Console.WriteLine("몬스터 턴으로 이동합니다.");
-            Console.ReadKey();
-        }
+
+                int baseAttack = player.attack;
+                int currentMonsterHp = selected.hp;
+                int offset = (int)Math.Ceiling(baseAttack * 0.1f);
+                int damage = _random.Next(baseAttack - offset, baseAttack + offset + 1);
+
+                if (IsCritical()) { damage = (int)Math.Ceiling(damage*1.6f) ;  Console.WriteLine("크리티컬 발동!"); } //크리티컬 여부판단
+                selected.hp -= damage;
+
+                Console.WriteLine($"\n{player.name}의 공격!");
+                Console.WriteLine($"{selected.name}을 맞췄습니다. [데미지 : {damage}]");
+                Console.WriteLine($"HP {currentMonsterHp} → {(selected.hp > 0 ? selected.hp.ToString() : "Dead")}");
+
+                if (selected.hp <= 0)
+                {
+                    selected.hp = 0;
+                    selected.isDead = true;
+                }
+                Console.WriteLine("몬스터 턴으로 이동합니다.");
+                Console.ReadKey();
+            }   }
 
         private void MonsterPhase()
         {
@@ -188,5 +195,21 @@ namespace TextRPG_Team25
                 fieldMonsters.Add(Monster.GenerateRandomMonster());
             }
         }
+
+        bool IsEvasion() //회피시스템
+        {
+            int evasion = _random.Next(1, 101);
+            if (evasion <= 10) { return true; }
+            else { return false; }
+        }
+
+        bool IsCritical()
+        {
+            int critical = _random.Next(1, 101);
+            if (critical <= 15) { return true; }
+            else { return false; }
+        }
+
+        
     }
 }
