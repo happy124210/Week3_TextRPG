@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TextRPG_Team25.UI;
 using TextRPG_Team25.Core;
 
+
 namespace TextRPG_Team25
 {
     enum ItemType { portion, defEquip, atKEquip }; // 포션, 방어 장비, 공격 장비
