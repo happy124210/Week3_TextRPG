@@ -195,14 +195,14 @@ namespace TextRPG_Team25
             }
         }
 
-        bool IsEvasion() //회피시스템
+        private bool IsEvasion()
         {
             int evasion = _random.Next(1, 101);
             if (evasion <= 10) { return true; }
             else { return false; }
         }
 
-        bool IsCritical()
+        private bool IsCritical() 
         {
             int critical = _random.Next(1, 101);
             if (critical <= 15) { return true; }
