@@ -1,7 +1,5 @@
 ﻿using TextRPG_Team25.UI;
 using TextRPG_Team25.Core;
-using System.Threading;
-using System;
 namespace TextRPG_Team25
 {
     internal class Battle(Player player)
