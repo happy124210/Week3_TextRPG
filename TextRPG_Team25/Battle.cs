@@ -17,6 +17,7 @@ namespace TextRPG_Team25
         public void StartBattle()
         {
             Console.Clear();
+            fieldMonsters.Clear();
 
             _isBattle = true;
             _isVictory = true;
