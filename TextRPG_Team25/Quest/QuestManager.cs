@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TextRPG_Team25.Quest
+﻿namespace TextRPG_Team25.Quest
 {
     internal class QuestManager
     {
         public List<Quest> questList = new List<Quest>();
 
-        public static void InitQuests()
+        public void InitQuests()
         {
             Quest quest1 = new Quest();
             quest1.title = "마을을 위협하는 미니언 처치";

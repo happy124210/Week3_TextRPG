@@ -1,7 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Runtime.Serialization;
-using TextRPG_Team25.Core;
+﻿using TextRPG_Team25.Core;
 using TextRPG_Team25.UI;
 
 namespace TextRPG_Team25.Quest
@@ -16,7 +13,7 @@ namespace TextRPG_Team25.Quest
         public int rewardGold; // 퀘스트 보상 골드
         public bool isCompleted; // 퀘스트 완료 여부
 
-        public static void ShowQuestList()
+        public void ShowQuestList()
         {
             Console.Clear();
             Utils.ColoredText("Quest!!\n\n", ConsoleColor.DarkYellow);
@@ -82,7 +79,7 @@ namespace TextRPG_Team25.Quest
                 {
                     Console.WriteLine($"\n{q.rewardItem}을(를) 받았습니다!");
                     Console.WriteLine($"{q.rewardGold} G를 획득했습니다.");
-                    GameManager.Instance.player.Gold += q.rewardGold;
+                    GameManager.Instance.player.gold += q.rewardGold;
                 }
                 else
                 {

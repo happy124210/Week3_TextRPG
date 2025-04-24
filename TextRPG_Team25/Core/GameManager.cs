@@ -1,8 +1,7 @@
-﻿using System;
-using TextRPG_Team25.Quest;
-
-namespace TextRPG_Team25.Core
+﻿namespace TextRPG_Team25.Core
 {
+    using TextRPG_Team25.Quest;
+
     internal class GameManager
     {
         // 싱글톤
@@ -10,59 +9,68 @@ namespace TextRPG_Team25.Core
         public static GameManager Instance => instance ??= new GameManager();
         public Player player;
         public Battle battle;
-        public QuestManager questManager;
+        public Quest quest;
 
         // 초기화
-        public void Initialize() 
+        public void Initialize()
         {
-            Console.WriteLine("플레이어의 이름을 입력하시오.\n>> ");
-    
+            Console.Write("플레이어의 이름을 입력하세요.\n>> ");
             string name = Console.ReadLine();
-            
-            
+
             player = new Player();
-            player.Name = name;
+            player.name = name;
             battle = new Battle(player);
-            questManager = new QuestManager(player);
+            quest = new Quest();
         }
 
         // 게임 실행
-        public void Run() 
+        public void Run()
         {
             ShowMainMenu();
         }
 
         // 메인 메뉴
-        public void ShowMainMenu() 
+        public void ShowMainMenu()
         {
-            Console.Clear();
-            Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
-            Console.WriteLine("이제 전투를 시작할 수 있습니다.\n");
-            Console.WriteLine("1. 상태 보기");
-            Console.WriteLine("2. 전투 시작\n");
-            Console.WriteLine("3. 퀘스트\n");
-            Console.Write("원하시는 행동을 입력해주세요.\n>> ");
-
-            string input = Console.ReadLine();
-
-            switch (input)
+            while (true)
             {
-                case "1":
-                    ShowStatus();
-                    break;
-                case "2":
-                    StartBattle();
-                    break;
-                case "3":
-                    ShowQuestList();
-                default:
-                    Console.WriteLine("\n잘못된 입력입니다.");
-                    Console.ReadLine();
-                    ShowMainMenu();
-                    break;
+                Console.Clear();
+                Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
+                Console.WriteLine("이제 전투를 시작할 수 있습니다.\n");
+                Console.WriteLine("1. 상태 보기");
+                Console.WriteLine("2. 인벤토리 보기");
+                Console.WriteLine("3. 전투 시작");
+                Console.WriteLine("4. 퀘스트 선택");
+                Console.WriteLine("0. 게임 종료\n");
+                Console.Write("원하시는 행동을 입력해주세요.\n>> ");
+
+                string input = Console.ReadLine();
+
+
+                switch (input)
+                {
+                    case "1":
+                        player.ShowStatus();
+                        break;
+                    case "2":
+                        player.ShowInventory();
+                        break;
+                    case "3":
+                        battle.StartBattle();
+                        break;
+                    case "4":
+                        quest.ShowQuestList();
+                        break;
+                    case "0":
+                        Console.WriteLine("\n게임을 종료합니다.");
+                        Console.ReadKey();
+                        return;
+                    default:
+                        Console.WriteLine("\n잘못된 입력입니다.");
+                        Console.ReadKey();
+                        break;
+                }
             }
         }
-       
-
     }
 }
