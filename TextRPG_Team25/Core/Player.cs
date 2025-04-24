@@ -11,10 +11,13 @@
         public int maxHp = 100;
         public int hp = 100; // 현재 체력
         public int gold = 1500;
-        // 상태 보기 메서드: 7개 속성만 출력
+        
 
         internal List<Item> inventory = new List<Item>();
-        
+
+        private Item equippedWeapon = null;
+        private Item equippedArmor = null;
+
         public void ShowStatus()
         {
             while (true)
@@ -44,50 +47,95 @@
             }
         }
 
-        public void ShowInventory()  //인벤토리 보기
+        public void ShowInventory()
         {
             Console.Clear();
 
-            // 테스트용 임시 아이템
-            AddInventory(0);
-            AddInventory(1);
+            // 테스트용 아이템
+            AddInventory("doranSword");
+            AddInventory("doranShield");
 
-            for(int i = 0; i < inventory.Count; i++)
+            if (inventory.Count == 0)
             {
-                inventory[i].ShowItem();
-            }
-            Console.WriteLine("계속하려면 아무 키나 누르세요...");
-            Console.ReadKey();
-        }
-
-        public void EquipmentManage()
-        {
-            Console.WriteLine("장착하거나 해제 하실 장비를 선택하세요");
-            string inputNum = Console.ReadLine();
-            if(!int.TryParse(inputNum, out int input))
-            {
-                Console.WriteLine("잘못된 입력입니다.");
-                Console.ReadKey();
-            }
-            if (input == 0) 
-            {
-                Console.WriteLine("메인화면으로 돌아갑니다.");
-                Console.ReadKey();
-            }
-            if (inventory[input - 1].type == ItemType.Potion)
-            {
-                Console.WriteLine("포션은 장착하거나 해제할 수 없습니다.");
-                Console.ReadKey();
+                Console.WriteLine("인벤토리가 비어 있습니다.");
             }
             else
             {
-                inventory[input - 1].EquipmentItem();
+                Console.WriteLine("인벤토리 목록\n");
+
+                for (int i = 0; i < inventory.Count; i++)
+                {
+                    var item = inventory[i];
+                    string typeLabel = item.type switch
+                    {
+                        ItemType.Weapon => "공격력",
+                        ItemType.Armor => "방어력",
+                        ItemType.Potion => "회복량",
+                    };
+
+                    string equipLabel = (item == equippedWeapon || item == equippedArmor) ? "[장착중] " : "";
+                    Console.Write($"{i + 1}. {equipLabel}{item.name} ");
+                    Console.WriteLine($"| {typeLabel} +{item.stat}");
+                }
             }
+
+            Console.WriteLine("\n계속하려면 아무 키나 누르세요...");
+            Console.ReadKey();
         }
 
-        public void AddInventory(int index) // 아이템 획득 시 실행
+        public void EquipItemById(string id)
         {
-            inventory.Add(Item.AddItem(index));
+            Item item = inventory.FirstOrDefault(i => i.id == id);
+
+            if (item == null)
+            {
+                Console.WriteLine($"인벤토리에 '{id}' 아이템이 없습니다.");
+                return;
+            }
+
+            switch (item.type)
+            {
+                case ItemType.Weapon:
+                    if (equippedWeapon != null)
+                    {
+                        attack -= equippedWeapon.stat;
+                        Console.WriteLine($"{equippedWeapon.name}을(를) 해제했습니다.");
+                    }
+                    equippedWeapon = item;
+                    attack += item.stat;
+                    Console.WriteLine($"{item.name}을(를) 장착했습니다! (공격력 +{item.stat})");
+                    break;
+
+                case ItemType.Armor:
+                    if (equippedArmor != null)
+                    {
+                        defense -= equippedArmor.stat;
+                        Console.WriteLine($"{equippedArmor.name}을(를) 해제했습니다.");
+                    }
+                    equippedArmor = item;
+                    defense += item.stat;
+                    Console.WriteLine($"{item.name}을(를) 장착했습니다! (방어력 +{item.stat})");
+                    break;
+
+                case ItemType.Potion:
+                    Console.WriteLine("포션은 장착할 수 없습니다.");
+                    break;
+            }
+        }
+            
+
+        public void AddInventory(string id)
+        {
+            Item item = ItemDatabase.GetItemById(id);
+            if (item != null)
+            {
+                inventory.Add(item);
+                Console.WriteLine($"{item.name}을(를) 인벤토리에 추가했습니다!");
+            }
+            else
+            {
+                Console.WriteLine($"ID '{id}'에 해당하는 아이템이 없습니다.");
+            }
         }
     }
 }
