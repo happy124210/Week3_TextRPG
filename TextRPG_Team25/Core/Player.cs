@@ -49,39 +49,50 @@
 
         public void ShowInventory()
         {
-            Console.Clear();
-
-            // 테스트용 아이템
-            AddInventory("doranSword");
-            AddInventory("doranShield");
-
-            if (inventory.Count == 0)
+            while (true)
             {
-                Console.WriteLine("인벤토리가 비어 있습니다.");
-            }
-            else
-            {
-                Console.WriteLine("인벤토리 목록\n");
+                Console.Clear();
 
-                for (int i = 0; i < inventory.Count; i++)
+                if (inventory.Count == 0)
                 {
-                    var item = inventory[i];
-                    string typeLabel = item.type switch
-                    {
-                        ItemType.Weapon => "공격력",
-                        ItemType.Armor => "방어력",
-                        ItemType.Potion => "회복량",
-                    };
-
-                    string equipLabel = (item == equippedWeapon || item == equippedArmor) ? "[장착중] " : "";
-                    Console.Write($"{i + 1}. {equipLabel}{item.name} ");
-                    Console.WriteLine($"| {typeLabel} +{item.stat}");
+                    Console.WriteLine("인벤토리가 비어 있습니다.");
                 }
-            }
 
-            Console.WriteLine("\n계속하려면 아무 키나 누르세요...");
-            Console.ReadKey();
+                else
+                {
+                    Console.WriteLine("인벤토리 목록\n");
+
+                    for (int i = 0; i < inventory.Count; i++)
+                    {
+                        var item = inventory[i];
+                        string typeLabel = item.type switch
+                        {
+                            ItemType.Weapon => "공격력",
+                            ItemType.Armor => "방어력",
+                            ItemType.Potion => "회복량",
+                        };
+
+                        string equipLabel = (item == equippedWeapon || item == equippedArmor) ? "[E] " : "";
+                        Console.Write($"[{i + 1}] {equipLabel}{item.name} ");
+                        Console.WriteLine($"| {typeLabel} +{item.stat}");
+                    }
+                }
+
+                Console.WriteLine("0. 나가기\n");
+                Console.Write(">> ");
+
+                string input = Console.ReadLine();
+
+                if (input == "0")
+                    break;
+
+                Console.WriteLine("잘못된 입력입니다");
+                Console.WriteLine("\n계속하려면 아무 키나 누르세요...");
+                Console.ReadKey();
+                    
+            } 
         }
+
 
         public void EquipItemById(string id)
         {
@@ -122,7 +133,7 @@
                     break;
             }
         }
-            
+
 
         public void AddInventory(string id)
         {
@@ -130,8 +141,8 @@
             if (item != null)
             {
                 inventory.Add(item);
-                Console.WriteLine($"{item.name}을(를) 인벤토리에 추가했습니다!");
             }
+
             else
             {
                 Console.WriteLine($"ID '{id}'에 해당하는 아이템이 없습니다.");

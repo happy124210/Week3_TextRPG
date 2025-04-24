@@ -4,7 +4,7 @@
 
     internal class Item
     {
-        public string id;         // 아이템 고유 ID
+        public string id;
         public string name;
         public int stat;
         public ItemType type;
