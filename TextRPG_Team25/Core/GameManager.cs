@@ -10,6 +10,7 @@
         public Player player;
         public Battle battle;
         public Quest quest;
+        public QuestManager questManager;
 
         // 초기화
         public void Initialize()
@@ -21,6 +22,9 @@
             player.name = name;
             battle = new Battle(player);
             quest = new Quest();
+            questManager = new QuestManager();
+
+            questManager.InitQuests();
         }
 
         // 게임 실행
