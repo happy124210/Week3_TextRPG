@@ -1,4 +1,6 @@
-﻿namespace TextRPG_Team25.Core
+﻿using TextRPG_Team25.BattleSystem;
+
+namespace TextRPG_Team25.Core
 {
     public class Player
     {
