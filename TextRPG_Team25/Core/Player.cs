@@ -15,6 +15,9 @@ namespace TextRPG_Team25.Core
         public int gold = 1500;
         public int mana = 100;
 
+        private int _activeDefenseBuffTurns;
+        private int _temporaryDefenseValue;
+
         internal List<Item> inventory = new List<Item>();
         
         public void ShowStatus()
@@ -145,10 +148,39 @@ namespace TextRPG_Team25.Core
             }
         }
 
-        
+
         public void TakeDamage(int damage)
         {
-            hp -= damage;
+            int reduced = defense / 2;
+            int finalDamage = Math.Max(1, damage - reduced);
+            hp -= finalDamage;
+
+            if (hp <= 0)
+            {
+                hp = 0;
+            }
+        }
+
+        // 방어력 버프
+        public void AddTemporaryDefense(int amount, int duration)
+        {
+            defense += amount;
+            _activeDefenseBuffTurns = duration;
+            _temporaryDefenseValue = amount;
+        }
+
+
+        public void OnTurnEnd()
+        {
+            if (_activeDefenseBuffTurns > 0)
+            {
+                _activeDefenseBuffTurns--;
+                if (_activeDefenseBuffTurns == 0)
+                {
+                    defense -= _temporaryDefenseValue;
+                    Console.WriteLine("버프가 사라졌습니다.");
+                }
+            }
         }
     }
 }

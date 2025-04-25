@@ -55,12 +55,10 @@ namespace TextRPG_Team25
             };
         }
 
+
         public void TakeDamage(int damage)
         {
             hp -= damage;
         }
     }
-
 }
-
-    
