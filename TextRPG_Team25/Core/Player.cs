@@ -1,4 +1,6 @@
-﻿namespace TextRPG_Team25.Core
+﻿using System.Numerics;
+
+namespace TextRPG_Team25.Core
 {
     public class Player
     {
@@ -56,8 +58,27 @@
             {
                 inventory[i].ShowItem();
             }
+            Console.WriteLine("장착하실 아이템을 선택해주세요");
             Console.WriteLine("계속하려면 아무 키나 누르세요...");
-            Console.ReadKey();
+            string inputNumber = Console.ReadLine();
+            bool num = int.TryParse(inputNumber, out int number);
+            if (num)
+            {
+                if (number <= inventory.Count)
+                {
+                    EquipmentItem(inventory[number-1]);
+                }
+                else
+                {
+                    Console.WriteLine("유효하지 않은 입력입니다. 메인화면으로 돌아갑니다.");
+                }
+            }
+            else
+            { 
+                Console.WriteLine("유효하지 않은 입력입니다., 메인화면으로 돌아갑니다.");
+                Console.ReadKey();
+            }
+            
         }
 
         public void EquipmentManage()
@@ -81,13 +102,47 @@
             }
             else
             {
-                inventory[input - 1].EquipmentItem();
+                EquipmentItem(inventory[input - 1]);
             }
         }
 
         public void AddInventory(int index) // 아이템 획득 시 실행
         {
             inventory.Add(Item.AddItem(index));
+        }
+
+        private void EquipmentItem(Item item)
+        {
+            switch (item.type)
+            {
+                case ItemType.Weapon:   //플레이어 공격력 증가                  
+                    if (!item.isEquip)
+                    {
+                        attack += item.effect;
+                        item.isEquip = true;
+                    }
+                    else
+                    {
+                        attack -= item.effect;
+                        item.isEquip = false;
+                    }
+                    break;
+                case ItemType.Armor:  //플레이어 방어력 증가
+                    if (!item.isEquip)
+                    {
+                        defense += item.effect;
+                        item.isEquip = true;
+                    }
+                    else
+                    {
+                        defense -= item.effect;
+                        item.isEquip = false;
+                    }
+                    break;
+                case ItemType.Potion:   //플레이어 체력 증가
+                    hp += item.effect;
+                    break;
+            }
         }
     }
 }
