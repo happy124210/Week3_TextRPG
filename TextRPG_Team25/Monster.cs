@@ -38,6 +38,7 @@ namespace TextRPG_Team25
             }
         };
 
+
         public static Monster GenerateRandomMonster()
         {
             var random = new Random();

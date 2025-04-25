@@ -28,6 +28,7 @@ namespace TextRPG_Team25
             isEquip = newIsEquip;
         }
 
+
         public static List<Item> items { get; } = new List<Item>
         {
             new Item("무기", 5, ItemType.Weapon, false),
@@ -35,39 +36,7 @@ namespace TextRPG_Team25
             new Item("포션", 5, ItemType.Potion, false),
         };
 
-        /*public void EquipmentItem()
-        {
-            switch (type)
-            {
-                case ItemType.Weapon:   //플레이어 공격력 증가                  
-                    if (!isEquip)
-                    {
-                        player.attack += effect;
-                        isEquip = true;
-                    }
-                    else
-                    {
-                        player.attack -= effect;
-                        isEquip = false;
-                    }
-                    break;
-                case ItemType.Armor:  //플레이어 방어력 증가
-                    if (!isEquip)
-                    {
-                        player.defense += effect;
-                        isEquip = true;
-                    }
-                    else
-                    {
-                        player.defense -= effect;
-                        isEquip = false;
-                    }
-                    break;
-                case ItemType.Potion:   //플레이어 체력 증가
-                    player.hp += effect;
-                    break;
-            }
-        }*/
+        
         public void ShowItem()
         {
             string itemName = "";
@@ -95,6 +64,7 @@ namespace TextRPG_Team25
 
 
         }
+
 
         public static Item AddItem(int index)
         {

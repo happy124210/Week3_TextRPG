@@ -1,5 +1,6 @@
 ﻿using TextRPG_Team25.Core;
 using TextRPG_Team25.UI;
+using TextRPG_Team25.Quest;
 
 namespace TextRPG_Team25.Quest
 {
