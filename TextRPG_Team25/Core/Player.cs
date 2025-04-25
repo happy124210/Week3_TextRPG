@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace TextRPG_Team25.Core
+﻿namespace TextRPG_Team25.Core
 {
     public class Player
     {

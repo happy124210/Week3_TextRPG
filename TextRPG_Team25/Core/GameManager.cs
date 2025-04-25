@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TextRPG_Team25.Core
+﻿namespace TextRPG_Team25.Core
 {
+    using TextRPG_Team25.Quest;
+
     internal class GameManager
     {
         // 싱글톤
@@ -9,9 +9,11 @@ namespace TextRPG_Team25.Core
         public static GameManager Instance => instance ??= new GameManager();
         public Player player;
         public Battle battle;
+        public Quest quest;
+        public QuestManager questManager;
 
         // 초기화
-        public void Initialize() 
+        public void Initialize()
         {
             Console.Write("플레이어의 이름을 입력하세요.\n>> ");
             string name = Console.ReadLine();
@@ -19,16 +21,20 @@ namespace TextRPG_Team25.Core
             player = new Player();
             player.name = name;
             battle = new Battle(player);
+            quest = new Quest();
+            questManager = new QuestManager();
+
+            questManager.InitQuests();
         }
 
         // 게임 실행
-        public void Run() 
+        public void Run()
         {
             ShowMainMenu();
         }
 
         // 메인 메뉴
-        public void ShowMainMenu() 
+        public void ShowMainMenu()
         {
             while (true)
             {
@@ -38,12 +44,14 @@ namespace TextRPG_Team25.Core
                 Console.WriteLine("1. 상태 보기");
                 Console.WriteLine("2. 인벤토리 보기");
                 Console.WriteLine("3. 전투 시작");
+                Console.WriteLine("4. 여관");
+                Console.WriteLine("5. 퀘스트 선택");
                 Console.WriteLine("0. 게임 종료\n");
                 Console.Write("원하시는 행동을 입력해주세요.\n>> ");
 
                 string input = Console.ReadLine();
 
-            
+
                 switch (input)
                 {
                     case "1":
@@ -54,6 +62,12 @@ namespace TextRPG_Team25.Core
                         break;
                     case "3":
                         battle.StartBattle();
+                        break;
+                    case "4":
+                        player.hp = 100;
+                        break;
+                    case "5":
+                        quest.ShowQuestList();
                         break;
                     case "0":
                         Console.WriteLine("\n게임을 종료합니다.");
