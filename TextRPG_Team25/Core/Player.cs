@@ -13,7 +13,7 @@ namespace TextRPG_Team25.Core
         public int maxHp = 100;
         public int hp = 100; // 현재 체력
         public int gold = 1500;
-        // 상태 보기 메서드: 7개 속성만 출력
+        public int mana = 100;
 
         internal List<Item> inventory = new List<Item>();
         
@@ -143,6 +143,12 @@ namespace TextRPG_Team25.Core
                     hp += item.effect;
                     break;
             }
+        }
+
+        
+        public void TakeDamage(int damage)
+        {
+            hp -= damage;
         }
     }
 }
