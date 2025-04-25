@@ -1,6 +1,7 @@
 ﻿namespace TextRPG_Team25.Core
 {
     using TextRPG_Team25.Quest;
+    using TextRPG_Team25.UI;
 
     internal class GameManager
     {
@@ -15,7 +16,7 @@
         // 초기화
         public void Initialize()
         {
-            Console.Write("플레이어의 이름을 입력하세요.\n>> ");
+            Console.Write("이름을 입력하세요.\n>> ");
             string name = Console.ReadLine();
 
             player = new Player();
@@ -39,14 +40,14 @@
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
-                Console.WriteLine("이제 전투를 시작할 수 있습니다.\n");
-                Console.WriteLine("1. 상태 보기");
-                Console.WriteLine("2. 인벤토리 보기");
-                Console.WriteLine("3. 전투 시작");
-                Console.WriteLine("4. 여관");
-                Console.WriteLine("5. 퀘스트 선택");
-                Console.WriteLine("0. 게임 종료\n");
+                Console.WriteLine("25조 Text RPG");
+                Console.WriteLine("");
+                Utils.MenuOption("1", "내 정보");
+                Utils.MenuOption("2", "인벤토리");
+                Utils.MenuOption("3", "전투");
+                Utils.MenuOption("4", "여관");
+                Utils.MenuOption("5", "퀘스트");
+                Utils.MenuOption("0", "게임 종료\n");
                 Console.Write("원하시는 행동을 입력해주세요.\n>> ");
 
                 string input = Console.ReadLine();

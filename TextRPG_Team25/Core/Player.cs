@@ -1,22 +1,25 @@
-﻿namespace TextRPG_Team25.Core
+﻿using TextRPG_Team25.UI;
+
+namespace TextRPG_Team25.Core
 {
     public class Player
     {
         public string name = "";
-        public string job = "전사";
+        public string job = "검투사";
 
         public int level = 1;
-        public int attack = 10;
-        public int defense = 5;
-        public int maxHp = 100;
-        public int hp = 100; // 현재 체력
+        public int attack;
+        public int defense;
+        public int maxHp;
+        public int hp; // 현재 체력
         public int gold = 1500;
-        // 상태 보기 메서드: 7개 속성만 출력
 
         internal List<Item> inventory = new List<Item>();
         
         public void ShowStatus()
         {
+            UpdateStatsBasedOnJob();
+
             while (true)
             {
                 Console.Clear();
@@ -30,18 +33,50 @@
                 Console.WriteLine($"체력 : {hp} / {maxHp}");
                 Console.WriteLine($"Gold : {gold} G\n");
 
-                Console.WriteLine("0. 나가기\n");
+                Utils.MenuOption("1", "직업 선택");
+                Utils.MenuOption("0", "나가기");
                 Console.Write(">> ");
 
                 string input = Console.ReadLine();
-                if (input == "0")
-                    break;
+                if (input == "0") break;
+
+                else if (input == "1")
+                {
+                    JobMenu jobMenu = new JobMenu(this);
+                    jobMenu.ShowJobSelectionMenu();
+                    UpdateStatsBasedOnJob();
+                }
 
                 // 잘못된 입력 처리
                 Console.WriteLine("잘못된 입력입니다");
                 Console.WriteLine("계속하려면 아무 키나 누르세요...");
                 Console.ReadKey();
             }
+        }
+
+        public void UpdateStatsBasedOnJob()
+        {
+            switch (job)
+            {
+                case "검투사":
+                    attack = 11;
+                    defense = 5;
+                    maxHp = 100;
+                    break;
+                case "화염술사":
+                    attack = 13;
+                    defense = 5;
+                    maxHp = 60;
+                    break;
+                case "얼음술사":
+                    attack = 7;
+                    defense = 10;
+                    maxHp = 150;
+                    break;
+            }
+
+            // 변경된 능력치에 맞게 현재 체력을 갱신
+            hp = maxHp;
         }
 
         public void ShowInventory()  //인벤토리 보기
@@ -125,6 +160,7 @@
                         item.isEquip = false;
                     }
                     break;
+
                 case ItemType.Armor:  //플레이어 방어력 증가
                     if (!item.isEquip)
                     {
@@ -137,6 +173,7 @@
                         item.isEquip = false;
                     }
                     break;
+
                 case ItemType.Potion:   //플레이어 체력 증가
                     hp += item.effect;
                     break;
