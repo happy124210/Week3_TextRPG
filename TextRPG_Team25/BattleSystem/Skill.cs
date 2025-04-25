@@ -3,7 +3,7 @@ using TextRPG_Team25.UI;
 
 namespace TextRPG_Team25.BattleSystem
 {
-    internal abstract class Skill
+    public abstract class Skill
     {
         public string name;
         public int manaCost;
@@ -41,11 +41,13 @@ namespace TextRPG_Team25.BattleSystem
             ActivateEffect(user, target);
         }
 
+
         public void ReduceCooldown()
         {
             if (currentCooldown > 0)
                 currentCooldown -= 1;
         }
+
 
         public abstract void ActivateEffect(Player user, Monster target);
     }

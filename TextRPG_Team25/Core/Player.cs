@@ -1,4 +1,5 @@
 ﻿using TextRPG_Team25.BattleSystem;
+using TextRPG_Team25.UI;
 
 namespace TextRPG_Team25.Core
 {
@@ -10,44 +11,90 @@ namespace TextRPG_Team25.Core
         public int level = 1;
         public int attack = 10;
         public int defense = 5;
-        public int maxHp = 100;
         public int hp = 100; // 현재 체력
+        public int maxHp = 100;
         public int gold = 1500;
-        public int mana = 100;
+        public int mana = 50;
+        public int maxMana = 50;
+        public Skill firstSkill;
+        public Skill secondSkill;
 
         private int _activeDefenseBuffTurns;
         private int _temporaryDefenseValue;
 
-        internal List<Item> inventory = new List<Item>();
-        
-        public void ShowStatus()
+        public List<Item> inventory = new List<Item>();
+
+        public void StatusMenu()
         {
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("상태 보기\n");
-
-                // 필수 속성 출력
-                Console.WriteLine($"Lv.{level:D2}");
-                Console.WriteLine($"{name} ( {job} )");
-                Console.WriteLine($"공격력 : {attack}");
-                Console.WriteLine($"방어력 : {defense}");
-                Console.WriteLine($"체력 : {hp} / {maxHp}");
-                Console.WriteLine($"Gold : {gold} G\n");
-
-                Console.WriteLine("0. 나가기\n");
-                Console.Write(">> ");
+                ShowStatus();
 
                 string input = Console.ReadLine();
                 if (input == "0")
                     break;
 
-                // 잘못된 입력 처리
-                Console.WriteLine("잘못된 입력입니다");
-                Console.WriteLine("계속하려면 아무 키나 누르세요...");
+                else if (input == "1")
+                {
+                    // 직업 선택 메뉴 호출
+                    JobMenu jobMenu = new JobMenu(this);
+                    jobMenu.ShowJobSelectionMenu();
+                    UpdateStatsBasedOnJob();
+                    SetSkillsByJob();
+                }
+
+                Utils.MenuOption("1", "직업 선택");
+                Utils.MenuOption("0", "나가기");
+
                 Console.ReadKey();
             }
         }
+
+        // 플레이어 스탯 출력
+        public void ShowStatus(
+            bool showName = true,
+            bool showLevel = true,
+            bool showStats = true,
+            bool showHP = true,
+            bool showMana = true,
+            bool showGold = true,
+            bool showEquipment = true)
+        {
+            Utils.ColoredText("\n[ 캐릭터 정보 ]\n\n", ConsoleColor.DarkCyan);
+            Console.WriteLine("==================================\n");
+
+            if (showName) Console.WriteLine($" 이름     : {name} ({job})");
+            if (showLevel) Console.WriteLine($" 레벨     : Lv. {level}");
+
+            if (showStats)
+            {
+                Console.Write($" 공격력   : {attack}\n");
+                Console.Write($" 방어력   : {defense}\n");
+            }
+
+            if (showHP)
+            {
+                Console.Write(" 체력     : ");
+                Utils.ColoredText($"{hp} / {maxHp}\n", ConsoleColor.Green);
+            }
+
+            if (showMana)
+            {
+                Console.Write(" 마나     : ");
+                Utils.ColoredText($"{hp} / {maxHp}\n", ConsoleColor.Cyan);
+            }    
+
+            if (showGold)
+            {
+                Console.Write(" 골드     : ");
+                Utils.ColoredText($"{gold}", ConsoleColor.DarkYellow);
+                Console.WriteLine(" G");
+            }
+
+            Console.WriteLine("\n==================================\n");
+        }
+
 
         public void ShowInventory()  //인벤토리 보기
         {
@@ -83,6 +130,32 @@ namespace TextRPG_Team25.Core
             }
             
         }
+
+
+        public void UpdateStatsBasedOnJob()
+        {
+            switch (job)
+            {
+                case "검투사":
+                    attack = 11;
+                    defense = 5;
+                    maxHp = 100;
+                    break;
+                case "화염술사":
+                    attack = 13;
+                    defense = 5;
+                    maxHp = 60;
+                    break;
+                case "얼음술사":
+                    attack = 7;
+                    defense = 10;
+                    maxHp = 150;
+                    break;
+            }
+
+            hp = maxHp;
+        }
+
 
         public void EquipmentManage()
         {
@@ -130,6 +203,7 @@ namespace TextRPG_Team25.Core
                         item.isEquip = false;
                     }
                     break;
+
                 case ItemType.Armor:  //플레이어 방어력 증가
                     if (!item.isEquip)
                     {
@@ -142,6 +216,7 @@ namespace TextRPG_Team25.Core
                         item.isEquip = false;
                     }
                     break;
+
                 case ItemType.Potion:   //플레이어 체력 증가
                     hp += item.effect;
                     break;
@@ -158,7 +233,10 @@ namespace TextRPG_Team25.Core
             if (hp <= 0)
             {
                 hp = 0;
+                Console.WriteLine($"\n{name}이(가) 쓰러졌습니다..."); 
             }
+
+            Console.WriteLine($"HP {hp}");
         }
 
         // 방어력 버프
@@ -180,6 +258,28 @@ namespace TextRPG_Team25.Core
                     defense -= _temporaryDefenseValue;
                     Console.WriteLine("버프가 사라졌습니다.");
                 }
+            }
+        }
+
+
+        public void SetSkillsByJob()
+        {
+            switch (job)
+            {
+                case "검투사":
+                    firstSkill = new DecisiveStrike();
+                    secondSkill = new Courage();
+                    break;
+
+                case "화염술사":
+                    firstSkill = new Disintegrate();
+                    secondSkill = new MoltenShield();
+                    break;
+
+                case "얼음술사":
+                    firstSkill = new IceShard();
+                    secondSkill = new FrostArrow();
+                    break;
             }
         }
     }

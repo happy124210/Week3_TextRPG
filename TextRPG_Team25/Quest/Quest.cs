@@ -4,7 +4,7 @@ using TextRPG_Team25.Quest;
 
 namespace TextRPG_Team25.Quest
 {
-    internal class Quest
+    public class Quest
     {
         public string title; // 퀘스트 제목
         public string description; // 퀘스트 설명

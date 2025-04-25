@@ -1,14 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+﻿using TextRPG_Team25.BattleSystem;
 
 namespace TextRPG_Team25
 {
-    internal class Monster
+    public class Monster
     {
-        public enum StatusEffect
-        {
-            Burn,
-            Freeze
-        }
+        
 
         public string name;
         public int level;
@@ -83,10 +79,12 @@ namespace TextRPG_Team25
             return statusEffects.ContainsKey(effect);
         }
 
+
         public int GetStatusTurns(StatusEffect effect)
         {
             return statusEffects.ContainsKey(effect) ? statusEffects[effect] : 0;
         }
+
 
         public void OnTurnEnd()
         {
