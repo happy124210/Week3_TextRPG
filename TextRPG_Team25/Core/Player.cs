@@ -16,7 +16,7 @@ namespace TextRPG_Team25.Core
         // 상태 보기 메서드: 7개 속성만 출력
 
         internal List<Item> inventory = new List<Item>();
-        
+        Shop shop = new Shop();
         public void ShowStatus()
         {
             while (true)
@@ -144,5 +144,53 @@ namespace TextRPG_Team25.Core
                     break;
             }
         }
+
+        public void ShowShopItem()
+        {
+            shop.ShowShop();
+            string input = Console.ReadLine();
+            bool num = int.TryParse(input, out int number);
+            if (num)
+            {
+                switch (number)
+                {
+                    case 1:
+                        Console.WriteLine("구매하실 아이템을 선택해 주세요");
+                        string shopNum = Console.ReadLine();
+                        int buyNum = int.Parse(shopNum);
+                        BuyShopItem(buyNum);
+                        break;
+                    case 2:
+                        Console.WriteLine("판매하실 아이템을 선택해 주세요");
+                        break;
+                }
+            }
+            else
+            {
+                Console.ReadKey();
+            }
+        }
+        public void BuyShopItem(int buyNum)
+        {
+            int shopNum = buyNum - 1;
+            if (buyNum > shop.shopItems.Count)
+            {
+                Console.WriteLine("상점에 판매하지 않는 물품입니다.");
+                Console.ReadKey();
+            }
+            else
+            {
+                if (shop.shopItems[shopNum].price <= gold)
+                {
+                    gold -= shop.shopItems[shopNum].price;
+                    inventory.Add(shop.AddShopItem(shopNum));
+                }
+                else
+                {
+                    Console.WriteLine("골드가 부족합니다.");
+                }
+            }
+        }
+
     }
 }

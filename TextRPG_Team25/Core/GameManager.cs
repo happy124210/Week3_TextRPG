@@ -9,6 +9,7 @@ namespace TextRPG_Team25.Core
         public static GameManager Instance => instance ??= new GameManager();
         public Player player;
         public Battle battle;
+        public Shop shop;
 
         // 초기화
         public void Initialize() 
@@ -38,6 +39,7 @@ namespace TextRPG_Team25.Core
                 Console.WriteLine("1. 상태 보기");
                 Console.WriteLine("2. 인벤토리 보기");
                 Console.WriteLine("3. 전투 시작");
+                Console.WriteLine("4. 상점"); // 테스트 코드입니다.
                 Console.WriteLine("0. 게임 종료\n");
                 Console.Write("원하시는 행동을 입력해주세요.\n>> ");
 
@@ -54,6 +56,9 @@ namespace TextRPG_Team25.Core
                         break;
                     case "3":
                         battle.StartBattle();
+                        break;
+                    case "4":              // 테스트 코드입니다.
+                        player.ShowShopItem ();
                         break;
                     case "0":
                         Console.WriteLine("\n게임을 종료합니다.");

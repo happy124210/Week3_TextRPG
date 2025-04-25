@@ -32,8 +32,8 @@
             Console.ResetColor();
         }
 
-        // 아이템 리스트 출력 함수 ex) utils.PrintItems(shopItems, showIndex, showequipped, showPrice, showSellPrice);
-        /*public void PrintItems(
+        //아이템 리스트 출력 함수 ex) utils.PrintItems(shopItems, showIndex, showequipped, showPrice, showSellPrice);
+        public void PrintItems(
                 List<Item> items,
                 bool showIndex = false, // index표시
                 bool showEquip = false, // (E) 표시
@@ -46,13 +46,13 @@
             foreach (var item in items)
             {
                 string prefix = showIndex ? $"[{displayIndex++}]" : "";
-                string priceLabel = showPrice ? $" | {item.price}원 " : "";
-                string sellPriceLabel = showSellPrice ? $" | {(int)(item.price * 0.85f)}원 " : "";
+                string priceLabel = showPrice ? $" 구매가격 | {item.price}원  |" : "";
+                string sellPriceLabel = showSellPrice ? $" 판매가격 | {(int)(item.price * 0.85f)}원 " : "";
                 string statLabel = item.type == ItemType.Weapon ? "공격력" : "방어력";
                 string equipped = showEquip && item.isEquip ? "(E) " : "";
 
                 Console.WriteLine($"{prefix} {equipped}{item.name}{priceLabel}{sellPriceLabel}| ({statLabel} +{item.effect})");
             }
-        }*/
+        }
     }
 }
