@@ -16,6 +16,7 @@ namespace TextRPG_Team25
         public int effect;
         public ItemType type;
         public bool isEquip;
+        public int itemPrice;
         //public bool hasItem  인벤토리 관련 리스트 작성 시 사용 현재 보류
         Player player;
 
@@ -26,6 +27,15 @@ namespace TextRPG_Team25
             effect = newEffect;
             type = newType;
             isEquip = newIsEquip;
+        }
+
+        public Item(string newName, int newEffect, ItemType newType, bool newIsEquip, int newPrice)
+        {
+            name = newName;
+            effect = newEffect;
+            type = newType;
+            isEquip = newIsEquip;
+            itemPrice = newPrice;
         }
 
         public static List<Item> items { get; } = new List<Item>
