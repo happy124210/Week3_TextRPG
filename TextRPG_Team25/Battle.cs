@@ -124,6 +124,19 @@ namespace TextRPG_Team25
                 {
                     selected.hp = 0;
                     selected.isDead = true;
+
+                    foreach (TextRPG_Team25.Quest.Quest quest in GameManager.Instance.questManager.questList)
+                    {
+                        if (!quest.isCompleted && quest.title == "마을을 위협하는 미니언 처치")
+                        {
+                            quest.currentCount++;
+                            if(quest.currentCount >=quest.goalCount)
+                            {
+                                quest.isCompleted = true;
+                                Console.WriteLine("\n퀘스트 완료! [마을을 위협하는 미니언 처치]");
+                            }
+                        }
+                    }
                 }
                 Console.WriteLine("몬스터 턴으로 이동합니다.");
                 Console.ReadKey();
