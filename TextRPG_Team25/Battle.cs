@@ -45,7 +45,8 @@ namespace TextRPG_Team25
                 {
                     var m = fieldMonsters[i];
                     string status = m.isDead ? "Dead" : $"HP {m.hp}";
-                    Console.WriteLine($"{i + 1}. Lv.{m.level} {m.name}  {status}");
+                    ConsoleColor color = m.isDead ? ConsoleColor.DarkGray : ConsoleColor.White;
+                    Utils.ColoredText($"{i + 1}. Lv.{m.level} {m.name}  {status}\n", color);
                 }
 
                 Console.WriteLine("");
