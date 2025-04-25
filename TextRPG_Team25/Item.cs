@@ -67,6 +67,16 @@ namespace TextRPG_Team25
                     player.hp += effect;
                     break;
             }
+
+            foreach (var quest in GameManager.Instance.questManager.questList)
+            {
+                if (!quest.isCompleted && quest.title == "장비를 장착해보자" && quest.isAccepted)
+                {
+                    quest.currentCount = 1;
+                    quest.isCompleted = true;
+                    Console.WriteLine("퀘스트 완료! [장비를 장착해보자]");
+                }
+            }
         }
         public void ShowItem()
         {
