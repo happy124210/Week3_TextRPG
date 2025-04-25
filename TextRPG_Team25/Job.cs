@@ -19,8 +19,8 @@ namespace TextRPG_Team25.Core
                 Console.WriteLine("직업을 선택하세요:\n");
                 Console.WriteLine("1. 전사 - 공격력 상, 방어력 중, 체력 중");
                 Console.WriteLine("2. 도적 - 공격력 최상, 방어력 중, 체력 하");
-                Console.WriteLine("3. 기갑병 - 공격력 하, 방어력 상, 체력 상");
-                Console.WriteLine("0. 뒤로가기\n");
+                Console.WriteLine("3. 기갑병 - 공격력 하, 방어력 상, 체력 상\n");
+                Console.WriteLine("0. 나가기\n");
                 Console.Write(">> ");
 
                 string input = Console.ReadLine();
