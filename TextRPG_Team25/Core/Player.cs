@@ -56,8 +56,15 @@
             {
                 inventory[i].ShowItem();
             }
+            Console.WriteLine("장착하실 아이템을 선택해주세요");
             Console.WriteLine("계속하려면 아무 키나 누르세요...");
-            Console.ReadKey();
+            string inputNumber = Console.ReadLine();
+            bool num = int.TryParse(inputNumber, out int number);
+            if (num && (number < inventory.Count))
+            {
+                inventory[number - 1].EquipmentItem();
+            }
+            
         }
 
         public void EquipmentManage()

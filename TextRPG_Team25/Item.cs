@@ -45,7 +45,7 @@ namespace TextRPG_Team25
                         player.attack += effect;
                         isEquip = true;
                     }
-                    if (isEquip)
+                    else
                     {
                         player.attack -= effect;
                         isEquip = false;
@@ -57,7 +57,7 @@ namespace TextRPG_Team25
                         player.defense += effect;
                         isEquip = true;
                     }
-                    if (isEquip)
+                    else
                     {
                         player.defense -= effect;
                         isEquip = false;
