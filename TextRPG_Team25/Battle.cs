@@ -8,6 +8,7 @@ namespace TextRPG_Team25
 
         private Random _random = new Random();
         private int _previousHP = player.hp;
+        private int StageMonster;
         private bool _isBattle = true;
         private bool _isVictory = true;
 
@@ -22,7 +23,7 @@ namespace TextRPG_Team25
             _isBattle = true;
             _isVictory = true;
 
-
+            Stage();
             SpawnEnemy();
 
             while (_isBattle)
@@ -112,7 +113,7 @@ namespace TextRPG_Team25
                 int offset = (int)Math.Ceiling(baseAttack * 0.1f);
                 int damage = _random.Next(baseAttack - offset, baseAttack + offset + 1);
 
-                if (IsCritical()) { damage = (int)Math.Ceiling(damage*1.6f) ;  Console.WriteLine("크리티컬 발동!"); } //크리티컬 여부판단
+                if (IsCritical()) { damage = (int)Math.Ceiling(damage * 1.6f); Utils.ColoredText("크리티컬 발동!!\n", ConsoleColor.Red); } //크리티컬 여부판단
                 selected.hp -= damage;
 
                 Console.WriteLine($"\n{player.name}의 공격!");
@@ -189,11 +190,38 @@ namespace TextRPG_Team25
 
         private void SpawnEnemy()
         {
-            int spawnNum = _random.Next(1, 5);
+            int spawnNum = _random.Next(StageMonster, StageMonster + 4);
 
             for (int i = 0; i < spawnNum; i++)
             {
                 fieldMonsters.Add(Monster.GenerateRandomMonster());
+            }
+        }
+
+        private void Stage()
+        {
+            Utils.ColoredText("스테이지를 선택해주세요\n", ConsoleColor.Cyan);
+            Utils.ColoredText("1. 생기가 도는 초원\n", ConsoleColor.Green);
+            Utils.ColoredText("2. 어두운 동굴\n", ConsoleColor.Yellow);
+            Utils.ColoredText("3. 인적이 드문 숲\n", ConsoleColor.Red);
+            string stageselct = Console.ReadLine();
+            switch (stageselct)
+            {
+                case "1":
+                    StageMonster = 1;
+                    break;
+
+                case "2":
+                    StageMonster = 2;
+                    break;
+
+                case "3":
+                    StageMonster = 3;
+                    break;
+
+                default:
+                    Console.WriteLine("올바른 값을 입력해주세요");
+                    break;
             }
         }
 
