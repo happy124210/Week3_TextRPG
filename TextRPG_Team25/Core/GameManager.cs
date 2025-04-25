@@ -44,7 +44,8 @@
                 Console.WriteLine("1. 상태 보기");
                 Console.WriteLine("2. 인벤토리 보기");
                 Console.WriteLine("3. 전투 시작");
-                Console.WriteLine("4. 퀘스트 선택");
+                Console.WriteLine("4. 여관");
+                Console.WriteLine("5. 퀘스트 선택");
                 Console.WriteLine("0. 게임 종료\n");
                 Console.Write("원하시는 행동을 입력해주세요.\n>> ");
 
@@ -63,6 +64,9 @@
                         battle.StartBattle();
                         break;
                     case "4":
+                        player.hp = 100;
+                        break;
+                    case "5":
                         quest.ShowQuestList();
                         break;
                     case "0":
