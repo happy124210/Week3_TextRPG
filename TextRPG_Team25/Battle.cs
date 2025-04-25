@@ -50,7 +50,7 @@ namespace TextRPG_Team25
                 Console.WriteLine("");
                 Console.WriteLine("[내정보]");
                 Console.WriteLine($"Lv.{player.level}  {player.name} ({player.job})");
-                Console.WriteLine($"HP {player.maxHp}/{player.hp}\n");
+                Console.WriteLine($"HP {player.hp}/{player.maxHp}\n");
                 Console.WriteLine("0. 취소\n");
                 Console.WriteLine("대상을 선택해주세요.");
                 Console.Write(">> ");
@@ -175,14 +175,15 @@ namespace TextRPG_Team25
             if (_isVictory)
             {
                 Utils.ColoredText("Victory!\n", ConsoleColor.Green);
-                Console.WriteLine($"던전에서 몬스터 {fieldMonsters.Count}마리를 잡았습니다.");
+                Console.WriteLine($"던전에서 몬스터 {fieldMonsters.Count}마리를 잡았습니다.\n");
             }
             else
             {
                 Utils.ColoredText("You Lose . . .\n", ConsoleColor.Magenta);
-                Console.WriteLine($"Lv.{player.level} {player.name}");
-                Console.WriteLine($"HP {_previousHP} → 0");
             }
+
+            Console.WriteLine($"Lv.{player.level} {player.name}");
+            Console.WriteLine($"HP {_previousHP} → {player.hp}");
             Console.ReadKey();
         }
 
