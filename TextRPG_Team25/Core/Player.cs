@@ -3,13 +3,13 @@
     public class Player
     {
         public string name = "";
-        public string job = "";
+        public string job = "검투사";
 
         public int level = 1;
-        public int attack = 1;
-        public int defense = 1;
-        public int maxHp = 10;
-        public int hp = 10; // 현재 체력
+        public int attack;
+        public int defense;
+        public int maxHp;
+        public int hp; // 현재 체력
         public int gold = 1500;
 
         // 상태 보기 메서드: 7개 속성만 출력
@@ -28,8 +28,9 @@
                 Console.WriteLine($"체력 : {hp} / {maxHp}");
                 Console.WriteLine($"Gold : {gold} G\n");
 
-                Console.WriteLine("0. 나가기");
                 Console.WriteLine("1. 직업 선택\n");
+                Console.WriteLine("0. 나가기");
+
                 Console.Write(">> ");
 
                 string input = Console.ReadLine();
@@ -50,25 +51,20 @@
         {
             switch (job)
             {
-                case "전사":
+                case "검투사":
                     attack = 11;
                     defense = 5;
                     maxHp = 100;
                     break;
-                case "도적":
+                case "화염술사":
                     attack = 13;
                     defense = 5;
                     maxHp = 60;
                     break;
-                case "기갑병":
+                case "얼음술사":
                     attack = 7;
                     defense = 10;
                     maxHp = 150;
-                    break;
-                default:
-                    attack = 1;
-                    defense = 1;
-                    maxHp = 10;
                     break;
             }
 
