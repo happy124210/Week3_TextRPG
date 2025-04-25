@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace TextRPG_Team25.Core
+﻿namespace TextRPG_Team25.Core
 {
+    using TextRPG_Team25.Quest;
+    using TextRPG_Team25.UI;
+
     internal class GameManager
     {
         // 싱글톤
@@ -9,43 +10,49 @@ namespace TextRPG_Team25.Core
         public static GameManager Instance => instance ??= new GameManager();
         public Player player;
         public Battle battle;
-        public Shop shop;
+        public Quest quest;
+        public QuestManager questManager;
 
         // 초기화
-        public void Initialize() 
+        public void Initialize()
         {
-            Console.Write("플레이어의 이름을 입력하세요.\n>> ");
+            Console.Write("이름을 입력하세요.\n>> ");
             string name = Console.ReadLine();
 
             player = new Player();
             player.name = name;
             battle = new Battle(player);
+            quest = new Quest();
+            questManager = new QuestManager();
+
+            questManager.InitQuests();
         }
 
         // 게임 실행
-        public void Run() 
+        public void Run()
         {
             ShowMainMenu();
         }
 
         // 메인 메뉴
-        public void ShowMainMenu() 
+        public void ShowMainMenu()
         {
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
-                Console.WriteLine("이제 전투를 시작할 수 있습니다.\n");
-                Console.WriteLine("1. 상태 보기");
-                Console.WriteLine("2. 인벤토리 보기");
-                Console.WriteLine("3. 전투 시작");
-                Console.WriteLine("4. 상점"); // 테스트 코드입니다.
-                Console.WriteLine("0. 게임 종료\n");
+                Console.WriteLine("25조 Text RPG");
+                Console.WriteLine("");
+                Utils.MenuOption("1", "내 정보");
+                Utils.MenuOption("2", "인벤토리");
+                Utils.MenuOption("3", "전투");
+                Utils.MenuOption("4", "여관");
+                Utils.MenuOption("5", "퀘스트");
+                Utils.MenuOption("0", "게임 종료\n");
                 Console.Write("원하시는 행동을 입력해주세요.\n>> ");
 
                 string input = Console.ReadLine();
 
-            
+
                 switch (input)
                 {
                     case "1":
@@ -57,8 +64,11 @@ namespace TextRPG_Team25.Core
                     case "3":
                         battle.StartBattle();
                         break;
-                    case "4":              // 테스트 코드입니다.
-                        player.ShowShopItem ();
+                    case "4":
+                        player.hp = 100;
+                        break;
+                    case "5":
+                        quest.ShowQuestList();
                         break;
                     case "0":
                         Console.WriteLine("\n게임을 종료합니다.");

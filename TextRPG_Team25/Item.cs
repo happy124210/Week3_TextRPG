@@ -31,12 +31,15 @@ namespace TextRPG_Team25
             price = newPrice;
         }
 
+
         public static List<Item> items { get; } = new List<Item>
         {
             new Item("무기", 5, ItemType.Weapon, false, 0),
             new Item("방어구", 5, ItemType.Armor, false, 0),
             new Item("포션", 5, ItemType.Potion, false, 0),
         };
+
+        
         public void ShowItem()
         {
             string itemName = "";
@@ -64,6 +67,7 @@ namespace TextRPG_Team25
 
 
         }
+
 
         public static Item AddItem(int index)
         {
