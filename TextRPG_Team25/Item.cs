@@ -35,7 +35,7 @@ namespace TextRPG_Team25
             new Item("포션", 5, ItemType.Potion, false),
         };
 
-        public void EquipmentItem()
+        /*public void EquipmentItem()
         {
             switch (type)
             {
@@ -67,7 +67,7 @@ namespace TextRPG_Team25
                     player.hp += effect;
                     break;
             }
-        }
+        }*/
         public void ShowItem()
         {
             string itemName = "";
