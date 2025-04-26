@@ -1,4 +1,4 @@
-﻿namespace TextRPG_Team25
+﻿namespace TextRPG_Team25.ItemSystem
 {
     public enum ItemType 
     { 
@@ -34,13 +34,13 @@
 
         public Item(Item original)
         {
-            this.id = original.id;
-            this.name = original.name;
-            this.effect = original.effect;
-            this.type = original.type;
-            this.isEquip = original.isEquip;
-            this.isEquip = original.isPurchase;
-            this.price = original.price;
+            id = original.id;
+            name = original.name;
+            effect = original.effect;
+            type = original.type;
+            isEquip = original.isEquip;
+            isPurchase = original.isPurchase;
+            price = original.price;
         }
 
 
