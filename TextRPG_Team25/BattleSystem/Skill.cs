@@ -42,7 +42,7 @@ namespace TextRPG_Team25.BattleSystem
             return ActivateEffect(user, target);
         }
 
-
+        // 스킬 쿨타임 줄이기
         public void ReduceCooldown()
         {
             if (currentCooldown > 0)

@@ -2,6 +2,7 @@
 
 namespace TextRPG_Team25.BattleSystem
 {
+    // 검투사 첫 번째 스킬
     public class DecisiveStrike : Skill
     {
         public DecisiveStrike() : base("결정타", 10, 3, "공격력의 두 배로 하나의 적을 공격합니다.") { }
@@ -14,6 +15,7 @@ namespace TextRPG_Team25.BattleSystem
         }
     }
 
+    // 검투사 두 번째 스킬
     public class Courage : Skill
     {
         private int buffAmount = 5;
@@ -28,6 +30,7 @@ namespace TextRPG_Team25.BattleSystem
         }
     }
 
+    // 화염술사 첫 번째 스킬
     public class Disintegrate : Skill
     {
         private int burnDuration = 3;
@@ -43,6 +46,7 @@ namespace TextRPG_Team25.BattleSystem
         }
     }
 
+    // 화염술사 두 번째 스킬
     public class MoltenShield : Skill
     {
         private int buffAmount = 5;
@@ -59,6 +63,7 @@ namespace TextRPG_Team25.BattleSystem
         }
     }
 
+    // 얼음술사 첫 번째 스킬
     public class IceShard : Skill
     {
         public IceShard() : base("얼음 파편", 10, 3, "적 하나에게 피해를 주고, 1턴 동안 빙결 상태로 만듭니다.") { }
@@ -71,7 +76,7 @@ namespace TextRPG_Team25.BattleSystem
             return damage;
         }
     }
-
+    // 얼음술사 두 번째 스킬
     public class FrostArrow : Skill
     {
         public FrostArrow() : base("서리 화살", 15, 5, "강력한 피해와 함께 2턴 동안 적을 얼립니다.") { }
