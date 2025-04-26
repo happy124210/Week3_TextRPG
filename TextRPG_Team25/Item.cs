@@ -1,8 +1,4 @@
-﻿using System;
-using TextRPG_Team25.Core;
-
-
-namespace TextRPG_Team25
+﻿namespace TextRPG_Team25
 {
     public enum ItemType 
     { 
@@ -14,27 +10,45 @@ namespace TextRPG_Team25
 
     public class Item
     {
+        public string id;
         public string name;
         public int effect;
         public ItemType type;
         public bool isEquip;
-        //public bool hasItem  인벤토리 관련 리스트 작성 시 사용 현재 보류
+        public bool isPurchase;
+        public int price;
 
         public Item() { }
-        public Item(string newName, int newEffect, ItemType newType, bool newIsEquip)
+        public Item(string newId, string newName, int newEffect, ItemType newType, bool newIsEquip, bool newIsPurchase, int newPrice)
         {
+            id = newId;
             name = newName;
             effect = newEffect;
             type = newType;
             isEquip = newIsEquip;
+            isPurchase = newIsPurchase;
+            price = newPrice;
+            
+        }
+
+
+        public Item(Item original)
+        {
+            this.id = original.id;
+            this.name = original.name;
+            this.effect = original.effect;
+            this.type = original.type;
+            this.isEquip = original.isEquip;
+            this.isEquip = original.isPurchase;
+            this.price = original.price;
         }
 
 
         public static List<Item> items { get; } = new List<Item>
         {
-            new Item("무기", 5, ItemType.Weapon, false),
-            new Item("방어구", 5, ItemType.Armor, false),
-            new Item("포션", 5, ItemType.Potion, false),
+            new Item("1", "무기", 5, ItemType.Weapon, false, false, 0),
+            new Item("2", "방어구", 5, ItemType.Armor, false, false,0),
+            new Item("3", "포션", 5, ItemType.Potion, false, false, 0),
         };
 
         
@@ -58,6 +72,7 @@ namespace TextRPG_Team25
             {
                 Console.WriteLine($"[장착중] {name}   {itemName} : +{effect}");
             }
+
             else
             {
                 Console.WriteLine($"{name}   {itemName} : +{effect}");
@@ -66,17 +81,17 @@ namespace TextRPG_Team25
 
         }
 
-
-        public static Item AddItem(int index)
+        public static Item GetItem(string id)
         {
-            Item addItem = items[index];
-            return new Item
+            Item foundItem = items.FirstOrDefault(item => item.id == id);
+
+            if (foundItem == null)
             {
-                name = addItem.name,
-                effect = addItem.effect,
-                type = addItem.type,
-                isEquip = addItem.isEquip
-            };
+                Console.WriteLine($"[오류] 아이디 '{id}'에 해당하는 아이템을 찾을 수 없습니다.");
+                return null;
+            }
+
+            return new Item(foundItem); // 복사본 반환
         }
     }
 }

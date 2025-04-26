@@ -1,20 +1,20 @@
 ﻿using TextRPG_Team25.Core;
 using TextRPG_Team25.UI;
-using TextRPG_Team25.Quest;
 
 namespace TextRPG_Team25.Quest
 {
     public class Quest
     {
-        public string title; // 퀘스트 제목
-        public string description; // 퀘스트 설명
-        public int goalCount; // 목표 마릿수
-        public int currentCount; // 현재 마릿수
-        public string rewardItem; // 퀘스트 보상 아이템
-        public int rewardGold; // 퀘스트 보상 골드
-        public bool isAccepted = false; // 퀘스트 수락 여부
-        public bool isCompleted; // 퀘스트 완료 여부
-        public bool isRewarded = false; // 보상 수령 여부
+        public string title;
+        public string description;
+        public int goalCount;
+        public int currentCount;
+        public bool isCompleted;
+        public bool isRewarded;
+        public bool isAccepted;
+
+        public string rewardItemId;
+        public int rewardGold;
 
         public void ShowQuestList()
         {
@@ -38,7 +38,6 @@ namespace TextRPG_Team25.Quest
             }
 
             Utils.MenuOption("0", "나가기");
-
             Console.WriteLine();
 
             int selection = 0;
@@ -86,21 +85,21 @@ namespace TextRPG_Team25.Quest
             {
                 Console.WriteLine($"- 미니언 {q.goalCount}마리 처치 ({q.currentCount}/{q.goalCount})\n");
                 Utils.ColoredText("[ 보상 ]\n", ConsoleColor.Green);
-                Console.WriteLine($"{q.rewardItem} x 1");
+                Console.WriteLine($"{q.rewardItemId} x 1");
                 Console.WriteLine($"{q.rewardGold} G\n");
             }
             else if (q.title == "장비를 장착해보자")
             {
                 Console.WriteLine($"- 장비 {q.goalCount}개 장착 ({q.currentCount}/{q.goalCount})\n");
                 Utils.ColoredText("[ 보상 ]\n", ConsoleColor.Green);
-                Console.WriteLine($"{q.rewardItem} x 1");
+                Console.WriteLine($"{q.rewardItemId} x 1");
                 Console.WriteLine($"{q.rewardGold} G\n");
             }
             else if (q.title == "더욱 더 강해지기")
             {
                 Console.WriteLine($"- 레벨 {q.goalCount} 도달 (현재 레벨: {GameManager.Instance.player.level})\n");
                 Utils.ColoredText("[ 보상 ]\n", ConsoleColor.Green);
-                Console.WriteLine($"{q.rewardItem} x 1");
+                Console.WriteLine($"{q.rewardItemId} x 1");
                 Console.WriteLine($"{q.rewardGold} G\n");
             }
 
@@ -123,17 +122,11 @@ namespace TextRPG_Team25.Quest
             {
                 if (q.isCompleted && !q.isRewarded)
                 {
-                    Console.WriteLine($"\n{q.rewardItem}을(를) 받았습니다!");
+                    Console.WriteLine($"\n{q.rewardItemId}을(를) 받았습니다!");
                     Console.WriteLine($"{q.rewardGold} G를 획득했습니다.");
                     GameManager.Instance.player.gold += q.rewardGold;
+                    GameManager.Instance.player.AddInventory(q.rewardItemId);
                     q.isRewarded = true;
-
-                    if (q.rewardItem == "무기")
-                        GameManager.Instance.player.AddInventory(0);
-                    else if (q.rewardItem == "방어구")
-                        GameManager.Instance.player.AddInventory(1);
-                    else if (q.rewardItem == "포션")
-                        GameManager.Instance.player.AddInventory(2);
                 }
                 else
                 {

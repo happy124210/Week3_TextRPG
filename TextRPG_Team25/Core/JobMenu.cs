@@ -30,18 +30,22 @@
                         Console.WriteLine("\n검투사를 선택하였습니다!");
                         Console.ReadKey();
                         return;
+
                     case "2":
                         player.job = "화염술사";
                         Console.WriteLine("\n화염술사를 선택하였습니다!");
                         Console.ReadKey();
                         return;
+
                     case "3":
                         player.job = "얼음술사";
                         Console.WriteLine("\n얼음술사를 선택하였습니다!");
                         Console.ReadKey();
                         return;
+
                     case "0":
                         return;
+
                     default:
                         Console.WriteLine("\n잘못된 입력입니다.");
                         Console.ReadKey();
