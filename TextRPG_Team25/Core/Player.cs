@@ -1,4 +1,5 @@
 ﻿using TextRPG_Team25.BattleSystem;
+using TextRPG_Team25.ItemSystem;
 using TextRPG_Team25.UI;
 
 namespace TextRPG_Team25.Core
@@ -83,7 +84,7 @@ namespace TextRPG_Team25.Core
             if (showMana)
             {
                 Console.Write(" 마나     : ");
-                Utils.ColoredText($"{hp} / {maxHp}\n", ConsoleColor.Cyan);
+                Utils.ColoredText($"{mana} / {maxMana}\n", ConsoleColor.Cyan);
             }    
 
             if (showGold)

@@ -1,6 +1,4 @@
-﻿using TextRPG_Team25.BattleSystem;
-
-namespace TextRPG_Team25
+﻿namespace TextRPG_Team25.BattleSystem
 {
     public class Monster
     {

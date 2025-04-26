@@ -1,4 +1,6 @@
-﻿namespace TextRPG_Team25.UI
+﻿using TextRPG_Team25.ItemSystem;
+
+namespace TextRPG_Team25.UI
 {
     public class Utils
     {

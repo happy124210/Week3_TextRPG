@@ -3,6 +3,7 @@
     using TextRPG_Team25.Quest;
     using TextRPG_Team25.UI;
     using TextRPG_Team25.BattleSystem;
+    using TextRPG_Team25.ItemSystem;
 
     internal class GameManager
     {
