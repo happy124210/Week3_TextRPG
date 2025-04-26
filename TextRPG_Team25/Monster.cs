@@ -70,6 +70,7 @@ namespace TextRPG_Team25
             {
                 hp = 0;
                 isDead = true;
+                statusEffects.Clear();
             }
         }
 
@@ -88,6 +89,8 @@ namespace TextRPG_Team25
 
         public void OnTurnEnd()
         {
+            if (isDead) return;
+
             List<StatusEffect> expired = new List<StatusEffect>();
 
             foreach (var effect in statusEffects.Keys.ToList())

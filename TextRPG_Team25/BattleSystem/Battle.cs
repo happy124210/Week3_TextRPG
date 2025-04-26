@@ -57,14 +57,14 @@ namespace TextRPG_Team25.BattleSystem
 
         private void PrintBattleScreen()
         {
-            Utils.ColoredText("[ 전투 시작 ]\n", ConsoleColor.DarkCyan);
+            Utils.ColoredText("[ 몬스터 ]\n", ConsoleColor.DarkCyan);
 
             for (int i = 0; i < fieldMonsters.Count; i++)
             {
                 var m = fieldMonsters[i];
                 string status = m.isDead ? "Dead" : $"HP {m.hp}";
                 ConsoleColor color = m.isDead ? ConsoleColor.DarkGray : ConsoleColor.Gray;
-                Utils.ColoredText($"[{i + 1}] Lv.{m.level} {m.name} {status}", color);
+                Utils.ColoredText($"[{i + 1}] Lv.{m.level} {m.name} {status}\n", color);
             }
 
             Console.WriteLine();
@@ -89,35 +89,55 @@ namespace TextRPG_Team25.BattleSystem
                 return;
             }
 
-            int targetIndex = SelectTarget();
-            if (targetIndex == -1) return;
-
-            var target = fieldMonsters[targetIndex];
-            if (target.isDead)
+            while (true)
             {
-                Console.WriteLine("이미 죽은 몬스터입니다.");
-                Console.ReadKey();
-                return;
-            }
+                int targetIndex = SelectTarget();
+                if (targetIndex == -1)
+                {
+                    continue;
+                }
 
-            switch (input)
-            {
-                case "1":
-                    NormalAttack(target);
-                    break;
-                case "2":
-                    player.firstSkill.TryActivate(player, target);
-                    break;
-                case "3":
-                    player.secondSkill.TryActivate(player, target);
-                    break;
-                default:
-                    Console.WriteLine("잘못된 입력입니다.");
+                var target = fieldMonsters[targetIndex];
+                if (target.isDead)
+                {
+                    Console.WriteLine("이미 죽은 몬스터입니다.");
                     Console.ReadKey();
-                    break;
-            }
+                    continue;
+                }
 
-            Console.ReadKey();
+                switch (input)
+                {
+                    case "1":
+                        NormalAttack(target);
+                        break;
+
+                    case "2":
+                        if (!player.firstSkill.TryActivate(player, target))
+                        {
+                            Console.WriteLine("\n다시 행동을 선택하세요.");
+                            Console.ReadKey();
+                            continue; // 다시 선택
+                        }
+                        break;
+
+                    case "3":
+                        if (!player.secondSkill.TryActivate(player, target))
+                        {
+                            Console.WriteLine("\n다시 행동을 선택하세요.");
+                            Console.ReadKey();
+                            continue; // 다시 선택
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine("잘못된 입력입니다.");
+                        Console.ReadKey();
+                        continue; // 다시 선택
+                }
+
+                Console.ReadKey();
+                break;
+            }
         }
 
         private int SelectTarget()
@@ -151,22 +171,27 @@ namespace TextRPG_Team25.BattleSystem
 
         private void MonsterPhase()
         {
-            Console.Clear();
-            Console.WriteLine("[몬스터 턴]");
-
             foreach (var monster in fieldMonsters)
             {
                 if (monster.isDead) continue;
 
+                Console.Clear();
+
                 int attack = monster.attack;
+
                 if (monster.HasStatus(StatusEffect.Freeze))
                 {
                     attack = (int)(attack * 0.7f);
-                    Console.WriteLine($"{monster.name}이(가) 빙결 상태로 약화된 공격을 합니다! ❄️");
+                    Console.WriteLine($"{monster.name}이(가) ❄️ 빙결 상태로 약화된 공격을 합니다!");
                 }
 
+                // 내 상태 출력
+                Console.WriteLine();
+                player.ShowStatus(showEquipment: false);
+                Console.WriteLine();
+
                 player.TakeDamage(attack);
-                Console.WriteLine($"{monster.name}의 공격! {attack} 데미지를 입었습니다!");
+                Console.WriteLine($"{monster.name}의 공격! {attack} 데미지를 입혔습니다!");
 
                 if (player.hp <= 0)
                 {
@@ -174,10 +199,17 @@ namespace TextRPG_Team25.BattleSystem
                     _isVictory = false;
                     break;
                 }
+
+                Console.WriteLine("\n다음 몬스터의 공격을 보려면 아무 키나 누르세요...");
+                Console.ReadKey();
             }
 
-            Console.WriteLine("\n플레이어 턴으로 돌아갑니다.");
-            Console.ReadKey();
+            if (_isBattle)
+            {
+                Console.Clear();
+                Console.WriteLine("\n플레이어 턴으로 돌아갑니다.");
+                Console.ReadKey();
+            }
         }
 
         private void BattleResult()
