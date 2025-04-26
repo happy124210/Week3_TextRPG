@@ -6,7 +6,7 @@ namespace TextRPG_Team25.Core
     public class Player
     {
         public string name = "";
-        public string job = "검투사";
+        public string job = "";
 
         public int level = 1;
         public int attack = 10;
@@ -30,24 +30,25 @@ namespace TextRPG_Team25.Core
             {
                 Console.Clear();
                 ShowStatus();
-                Utils.MenuOption("1", "직업 선택");
+                Utils.MenuOption("1", "직업 변경");
                 Utils.MenuOption("0", "나가기");
-                Console.Write("행동을 선택해주세요.\n>> ");
+                Console.Write("\n행동을 선택해주세요.\n>> ");
 
                 string input = Console.ReadLine();
                 if (input == "0")
                     break;
-
                 else if (input == "1")
                 {
-                    // 직업 선택 메뉴 호출
                     JobMenu jobMenu = new JobMenu(this);
                     jobMenu.ShowJobSelectionMenu();
                     UpdateStatsBasedOnJob();
                     SetSkillsByJob();
                 }
-
-                Console.ReadKey();
+                else
+                {
+                    Console.WriteLine("\n잘못된 입력입니다.");
+                    Console.ReadKey();
+                }
             }
         }
 
@@ -95,8 +96,8 @@ namespace TextRPG_Team25.Core
             Console.WriteLine("\n==================================\n");
         }
 
-
-        public void ShowInventory()  //인벤토리 보기
+        //인벤토리 보기
+        public void ShowInventory()
         {
             while (true)
             {

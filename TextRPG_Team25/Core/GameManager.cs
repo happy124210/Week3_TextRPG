@@ -18,16 +18,28 @@
         // 초기화
         public void Initialize()
         {
+            Console.Clear();
+
+            // 이름 받기
             Console.Write("이름을 입력하세요.\n>> ");
             string name = Console.ReadLine();
 
-            player = new Player(); 
+            player = new Player();
             player.name = name;
+
+            Console.Clear();
+
+            // 직업 선택
+            JobMenu jobMenu = new JobMenu(player);
+            jobMenu.ShowJobSelectionMenu();
+
+            player.UpdateStatsBasedOnJob();
+            player.SetSkillsByJob();
+
             shop = new Shop();
             battle = new Battle(player);
             quest = new Quest();
             questManager = new QuestManager();
-
             questManager.InitQuests();
             player.UpdateStatsBasedOnJob();
             player.SetSkillsByJob();
