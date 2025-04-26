@@ -1,5 +1,6 @@
 ﻿using TextRPG_Team25.Core;
 using TextRPG_Team25.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TextRPG_Team25.BattleSystem
 {
@@ -7,8 +8,8 @@ namespace TextRPG_Team25.BattleSystem
     {
         private Player player;
         private List<Monster> fieldMonsters = new List<Monster>();
-        private bool _isBattle;
-        private bool _isVictory;
+        private bool isBattle;
+        private bool isVictory;
         private Random random = new Random();
 
         public Battle(Player player)
@@ -16,29 +17,30 @@ namespace TextRPG_Team25.BattleSystem
             this.player = player;
         }
 
+        // 초기 메뉴
         public void StartBattle()
         {
             Console.Clear();
             fieldMonsters.Clear();
             SpawnEnemy();
-            _isBattle = true;
-            _isVictory = true;
+            isBattle = true;
+            isVictory = true;
 
-            while (_isBattle)
+            while (isBattle)
             {
                 Console.Clear();
                 HandleTurnStart();
 
                 if (fieldMonsters.All(m => m.isDead))
                 {
-                    _isBattle = false;
+                    isBattle = false;
                     break;
                 }
 
                 PrintBattleScreen();
                 PlayerPhase();
 
-                if (!_isBattle) break;
+                if (!isBattle) break;
 
                 MonsterPhase();
             }
@@ -46,6 +48,7 @@ namespace TextRPG_Team25.BattleSystem
             BattleResult();
         }
 
+        // 턴 시작 시 플레이어, 몬스터 상태이상 확인
         private void HandleTurnStart()
         {
             player.OnTurnEnd();
@@ -55,9 +58,10 @@ namespace TextRPG_Team25.BattleSystem
             }
         }
 
+        // 배틀 UI 출력
         private void PrintBattleScreen()
         {
-            Utils.ColoredText("[ 몬스터 ]\n", ConsoleColor.DarkCyan);
+            Utils.ColoredText("[ 전투 상황 ]\n", ConsoleColor.DarkCyan);
 
             for (int i = 0; i < fieldMonsters.Count; i++)
             {
@@ -74,28 +78,25 @@ namespace TextRPG_Team25.BattleSystem
 
         private void PlayerPhase()
         {
-            Console.WriteLine("[플레이어 행동 선택]");
-            Utils.MenuOption("1", "일반 공격");
-            Utils.MenuOption("2", player.firstSkill.name);
-            Utils.MenuOption("3", player.secondSkill.name);
-            Utils.MenuOption("0", "도망치기");
-            Console.Write("\n>> ");
-
-            string input = Console.ReadLine();
-            if (input == "0")
-            {
-                _isBattle = false;
-                _isVictory = false;
-                return;
-            }
-
             while (true)
             {
-                int targetIndex = SelectTarget();
-                if (targetIndex == -1)
+                Console.WriteLine("[플레이어 행동 선택]");
+                Utils.MenuOption("1", "일반 공격");
+                Utils.MenuOption("2", player.firstSkill.name);
+                Utils.MenuOption("3", player.secondSkill.name);
+                Utils.MenuOption("0", "도망치기");
+                Console.Write("\n>> ");
+
+                string input = Console.ReadLine();
+                if (input == "0")
                 {
-                    continue;
+                    isBattle = false;
+                    isVictory = false;
+                    return;
                 }
+
+                int targetIndex = SelectTarget();
+                if (targetIndex == -1) continue;
 
                 var target = fieldMonsters[targetIndex];
                 if (target.isDead)
@@ -105,35 +106,34 @@ namespace TextRPG_Team25.BattleSystem
                     continue;
                 }
 
+                int damage = 0;
+
                 switch (input)
                 {
                     case "1":
-                        NormalAttack(target);
+                        damage = NormalAttack(target);
                         break;
-
                     case "2":
-                        if (!player.firstSkill.TryActivate(player, target))
-                        {
-                            Console.WriteLine("\n다시 행동을 선택하세요.");
-                            Console.ReadKey();
-                            continue; // 다시 선택
-                        }
+                        damage = player.firstSkill.TryActivate(player, target);
                         break;
-
                     case "3":
-                        if (!player.secondSkill.TryActivate(player, target))
-                        {
-                            Console.WriteLine("\n다시 행동을 선택하세요.");
-                            Console.ReadKey();
-                            continue; // 다시 선택
-                        }
+                        damage = player.secondSkill.TryActivate(player, target);
                         break;
-
                     default:
-                        Console.WriteLine("잘못된 입력입니다.");
+                        Console.WriteLine("\n잘못된 입력입니다.");
                         Console.ReadKey();
-                        continue; // 다시 선택
+                        continue;
                 }
+
+                if (damage <= 0)
+                {
+                    Console.WriteLine("\n행동에 실패했습니다. 다시 선택하세요.");
+                    Console.ReadKey();
+                    continue;
+                }
+
+                Console.WriteLine($"\n{target.name}을(를) 공격했습니다!");
+                Console.WriteLine($"{target.name} HP {Math.Max(target.hp + damage, 0)} → {Math.Max(target.hp, 0)}");
 
                 Console.ReadKey();
                 break;
@@ -158,16 +158,18 @@ namespace TextRPG_Team25.BattleSystem
             return -1;
         }
 
-        private void NormalAttack(Monster target)
+
+        private int NormalAttack(Monster target)
         {
             int baseAttack = player.attack;
             int offset = (int)Math.Ceiling(baseAttack * 0.1f);
             int damage = random.Next(baseAttack - offset, baseAttack + offset + 1);
+
             target.TakeDamage(damage);
 
-            Console.WriteLine($"\n{player.name}의 일반 공격!");
-            Console.WriteLine($"{target.name}에게 {damage} 데미지를 입혔습니다!");
+            return damage;
         }
+
 
         private void MonsterPhase()
         {
@@ -176,34 +178,33 @@ namespace TextRPG_Team25.BattleSystem
                 if (monster.isDead) continue;
 
                 Console.Clear();
+                PrintBattleScreen();
+                Console.WriteLine();
 
                 int attack = monster.attack;
 
                 if (monster.HasStatus(StatusEffect.Freeze))
                 {
                     attack = (int)(attack * 0.7f);
-                    Console.WriteLine($"{monster.name}이(가) ❄️ 빙결 상태로 약화된 공격을 합니다!");
+                    Console.WriteLine($"{monster.name}이(가) 빙결 상태로 약화된 공격을 합니다! ❄️");
                 }
-
-                // 몬스터, 플레이어 출력
-                PrintBattleScreen();
-                Console.WriteLine();
 
                 player.TakeDamage(attack);
                 Console.WriteLine($"{monster.name}의 공격! {attack} 데미지를 입혔습니다!");
+                Console.WriteLine();
 
                 if (player.hp <= 0)
                 {
-                    _isBattle = false;
-                    _isVictory = false;
+                    isBattle = false;
+                    isVictory = false;
                     break;
                 }
 
-                Console.WriteLine("\n다음 몬스터의 공격을 보려면 아무 키나 누르세요...");
+                Console.WriteLine("\n다음 몬스터 공격을 보려면 아무 키나 누르세요...");
                 Console.ReadKey();
             }
 
-            if (_isBattle)
+            if (isBattle)
             {
                 Console.WriteLine("\n플레이어 턴으로 돌아갑니다.");
                 Console.ReadKey();
@@ -215,10 +216,10 @@ namespace TextRPG_Team25.BattleSystem
             Console.Clear();
             Utils.ColoredText("[ 전투 종료 ]\n", ConsoleColor.DarkCyan);
 
-            if (_isVictory)
+            if (isVictory)
             {
                 Utils.ColoredText("Victory!!\n", ConsoleColor.Green);
-                Console.WriteLine($"던전에서 {fieldMonsters.Count}마리의 몬스터를 물리쳤습니다!");
+                Console.WriteLine($"던전에서 {fieldMonsters.Count}마리의 몬스터를 처치했습니다!");
             }
             else
             {

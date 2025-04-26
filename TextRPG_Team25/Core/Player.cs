@@ -248,8 +248,6 @@ namespace TextRPG_Team25.Core
                 hp = 0;
                 Console.WriteLine($"\n{name}이(가) 쓰러졌습니다..."); 
             }
-
-            Console.WriteLine($"HP {hp}");
         }
 
         // 방어력 버프

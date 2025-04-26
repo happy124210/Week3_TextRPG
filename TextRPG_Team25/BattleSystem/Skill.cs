@@ -19,26 +19,27 @@ namespace TextRPG_Team25.BattleSystem
             this.description = description;
         }
 
+        public abstract int ActivateEffect(Player user, Monster target);
+
         // 스킬 사용 가능 여부 체크
-        public bool TryActivate(Player user, Monster target)
+        public int TryActivate(Player user, Monster target)
         {
             if (currentCooldown > 0)
             {
                 Console.WriteLine("아직 사용할 수 없습니다.");
-                return false;
+                return 0;
             }
 
             if (user.mana < manaCost)
             {
                 Utils.ColoredText("마나가 부족합니다.", ConsoleColor.DarkRed);
-                return false;
+                return 0;
             }
 
             user.mana -= manaCost;
             currentCooldown = cooldown;
 
-            ActivateEffect(user, target);
-            return true;
+            return ActivateEffect(user, target);
         }
 
 
@@ -47,8 +48,5 @@ namespace TextRPG_Team25.BattleSystem
             if (currentCooldown > 0)
                 currentCooldown -= 1;
         }
-
-
-        public abstract void ActivateEffect(Player user, Monster target);
     }
 }
