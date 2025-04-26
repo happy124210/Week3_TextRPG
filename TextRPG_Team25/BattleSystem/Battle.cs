@@ -1,14 +1,15 @@
 ﻿using TextRPG_Team25.Core;
 using TextRPG_Team25.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TextRPG_Team25.BattleSystem
 {
     public class Battle
     {
         private Player player;
-        private List<Monster> fieldMonsters = new List<Monster>();
-        private bool _isBattle;
-        private bool _isVictory;
+        private List<Monster> fieldmonsterPool = new List<Monster>();
+        private bool isBattle;
+        private bool isVictory;
         private Random random = new Random();
 
         public Battle(Player player)
@@ -16,29 +17,33 @@ namespace TextRPG_Team25.BattleSystem
             this.player = player;
         }
 
+        // 배틀 전체 흐름
         public void StartBattle()
         {
             Console.Clear();
-            fieldMonsters.Clear();
-            SpawnEnemy();
-            _isBattle = true;
-            _isVictory = true;
+            
+            // 초기 세팅
+            fieldmonsterPool.Clear();
+            SpawnMonsters();
+            isBattle = true;
+            isVictory = true;
 
-            while (_isBattle)
+            // 전투 진행
+            while (isBattle)
             {
                 Console.Clear();
                 HandleTurnStart();
 
-                if (fieldMonsters.All(m => m.isDead))
+                if (fieldmonsterPool.All(m => m.isDead))
                 {
-                    _isBattle = false;
+                    isBattle = false;
                     break;
                 }
 
                 PrintBattleScreen();
                 PlayerPhase();
 
-                if (!_isBattle) break;
+                if (!isBattle) break;
 
                 MonsterPhase();
             }
@@ -46,22 +51,24 @@ namespace TextRPG_Team25.BattleSystem
             BattleResult();
         }
 
+        // 턴 시작 시 플레이어, 몬스터 상태이상 확인
         private void HandleTurnStart()
         {
             player.OnTurnEnd();
-            foreach (var monster in fieldMonsters)
+            foreach (var monster in fieldmonsterPool)
             {
                 monster.OnTurnEnd();
             }
         }
 
+        // 배틀 UI 출력
         private void PrintBattleScreen()
         {
-            Utils.ColoredText("[ 몬스터 ]\n", ConsoleColor.DarkCyan);
+            Utils.ColoredText("[ 전투 상황 ]\n", ConsoleColor.DarkCyan);
 
-            for (int i = 0; i < fieldMonsters.Count; i++)
+            for (int i = 0; i < fieldmonsterPool.Count; i++)
             {
-                var m = fieldMonsters[i];
+                var m = fieldmonsterPool[i];
                 string status = m.isDead ? "Dead" : $"HP {m.hp}";
                 ConsoleColor color = m.isDead ? ConsoleColor.DarkGray : ConsoleColor.Gray;
                 Utils.ColoredText($"[{i + 1}] Lv.{m.level} {m.name} {status}\n", color);
@@ -72,32 +79,30 @@ namespace TextRPG_Team25.BattleSystem
             Console.WriteLine();
         }
 
+        // 플레이어 턴
         private void PlayerPhase()
         {
-            Console.WriteLine("[플레이어 행동 선택]");
-            Utils.MenuOption("1", "일반 공격");
-            Utils.MenuOption("2", player.firstSkill.name);
-            Utils.MenuOption("3", player.secondSkill.name);
-            Utils.MenuOption("0", "도망치기");
-            Console.Write("\n>> ");
-
-            string input = Console.ReadLine();
-            if (input == "0")
-            {
-                _isBattle = false;
-                _isVictory = false;
-                return;
-            }
-
             while (true)
             {
-                int targetIndex = SelectTarget();
-                if (targetIndex == -1)
+                Console.WriteLine("[플레이어 행동 선택]");
+                Utils.MenuOption("1", "일반 공격");
+                Utils.MenuOption("2", player.firstSkill.name);
+                Utils.MenuOption("3", player.secondSkill.name);
+                Utils.MenuOption("0", "도망치기");
+                Console.Write("\n>> ");
+
+                string input = Console.ReadLine();
+                if (input == "0")
                 {
-                    continue;
+                    isBattle = false;
+                    isVictory = false;
+                    return;
                 }
 
-                var target = fieldMonsters[targetIndex];
+                int targetIndex = SelectTarget();
+                if (targetIndex == -1) continue;
+
+                var target = fieldmonsterPool[targetIndex];
                 if (target.isDead)
                 {
                     Console.WriteLine("이미 죽은 몬스터입니다.");
@@ -105,41 +110,41 @@ namespace TextRPG_Team25.BattleSystem
                     continue;
                 }
 
+                int damage = 0;
+
                 switch (input)
                 {
                     case "1":
-                        NormalAttack(target);
+                        damage = NormalAttack(target);
                         break;
-
                     case "2":
-                        if (!player.firstSkill.TryActivate(player, target))
-                        {
-                            Console.WriteLine("\n다시 행동을 선택하세요.");
-                            Console.ReadKey();
-                            continue; // 다시 선택
-                        }
+                        damage = player.firstSkill.TryActivate(player, target);
                         break;
-
                     case "3":
-                        if (!player.secondSkill.TryActivate(player, target))
-                        {
-                            Console.WriteLine("\n다시 행동을 선택하세요.");
-                            Console.ReadKey();
-                            continue; // 다시 선택
-                        }
+                        damage = player.secondSkill.TryActivate(player, target);
                         break;
-
                     default:
-                        Console.WriteLine("잘못된 입력입니다.");
+                        Console.WriteLine("\n잘못된 입력입니다.");
                         Console.ReadKey();
-                        continue; // 다시 선택
+                        continue;
                 }
+
+                if (damage <= 0)
+                {
+                    Console.WriteLine("\n행동에 실패했습니다. 다시 선택하세요.");
+                    Console.ReadKey();
+                    continue;
+                }
+
+                Console.WriteLine($"\n{target.name}을(를) 공격했습니다!");
+                Console.WriteLine($"{target.name} HP {Math.Max(target.hp + damage, 0)} → {Math.Max(target.hp, 0)}");
 
                 Console.ReadKey();
                 break;
             }
         }
 
+        // 선택 로직
         private int SelectTarget()
         {
             Console.WriteLine("\n공격할 몬스터 번호를 입력하세요.");
@@ -149,7 +154,7 @@ namespace TextRPG_Team25.BattleSystem
             if (int.TryParse(rawInput, out int selection))
             {
                 selection--;
-                if (selection >= 0 && selection < fieldMonsters.Count)
+                if (selection >= 0 && selection < fieldmonsterPool.Count)
                     return selection;
             }
 
@@ -158,69 +163,69 @@ namespace TextRPG_Team25.BattleSystem
             return -1;
         }
 
-        private void NormalAttack(Monster target)
+        // 일반 공격 처리
+        private int NormalAttack(Monster target)
         {
             int baseAttack = player.attack;
             int offset = (int)Math.Ceiling(baseAttack * 0.1f);
             int damage = random.Next(baseAttack - offset, baseAttack + offset + 1);
+
             target.TakeDamage(damage);
 
-            Console.WriteLine($"\n{player.name}의 일반 공격!");
-            Console.WriteLine($"{target.name}에게 {damage} 데미지를 입혔습니다!");
+            return damage;
         }
 
+        // 몬스터 턴
         private void MonsterPhase()
         {
-            foreach (var monster in fieldMonsters)
+            foreach (var monster in fieldmonsterPool)
             {
                 if (monster.isDead) continue;
 
                 Console.Clear();
+                PrintBattleScreen();
+                Console.WriteLine();
 
                 int attack = monster.attack;
 
                 if (monster.HasStatus(StatusEffect.Freeze))
                 {
                     attack = (int)(attack * 0.7f);
-                    Console.WriteLine($"{monster.name}이(가) ❄️ 빙결 상태로 약화된 공격을 합니다!");
+                    Console.WriteLine($"{monster.name}이(가) 빙결 상태로 약화된 공격을 합니다! ❄️");
                 }
-
-                // 내 상태 출력
-                Console.WriteLine();
-                player.ShowStatus(showEquipment: false);
-                Console.WriteLine();
 
                 player.TakeDamage(attack);
                 Console.WriteLine($"{monster.name}의 공격! {attack} 데미지를 입혔습니다!");
+                Console.WriteLine();
 
                 if (player.hp <= 0)
                 {
-                    _isBattle = false;
-                    _isVictory = false;
+                    isBattle = false;
+                    isVictory = false;
                     break;
                 }
 
-                Console.WriteLine("\n다음 몬스터의 공격을 보려면 아무 키나 누르세요...");
+                Console.WriteLine("\n다음 몬스터 공격을 보려면 아무 키나 누르세요...");
                 Console.ReadKey();
             }
 
-            if (_isBattle)
+            if (isBattle)
             {
-                Console.Clear();
                 Console.WriteLine("\n플레이어 턴으로 돌아갑니다.");
                 Console.ReadKey();
             }
         }
 
+        // 배틀 결과 출력
         private void BattleResult()
         {
             Console.Clear();
             Utils.ColoredText("[ 전투 종료 ]\n", ConsoleColor.DarkCyan);
 
-            if (_isVictory)
+            if (isVictory)
             {
                 Utils.ColoredText("Victory!!\n", ConsoleColor.Green);
-                Console.WriteLine($"던전에서 {fieldMonsters.Count}마리의 몬스터를 물리쳤습니다!");
+                Console.WriteLine($"던전에서 {fieldmonsterPool.Count}마리의 몬스터를 처치했습니다!");
             }
             else
             {
@@ -231,13 +236,14 @@ namespace TextRPG_Team25.BattleSystem
             Console.ReadKey();
         }
 
-        private void SpawnEnemy()
+        // 초기 몬스터 스폰
+        private void SpawnMonsters()
         {
             int spawnNum = random.Next(1, 5);
 
             for (int i = 0; i < spawnNum; i++)
             {
-                fieldMonsters.Add(Monster.GenerateRandomMonster());
+                fieldmonsterPool.Add(Monster.GenerateRandomMonster());
             }
         }
     }
