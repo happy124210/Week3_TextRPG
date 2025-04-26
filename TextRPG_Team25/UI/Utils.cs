@@ -33,7 +33,7 @@
         }
 
         // 아이템 리스트 출력 함수 ex) utils.PrintItems(shopItems, showIndex, showequipped, showPrice, showSellPrice);
-        /*public void PrintItems(
+        public void PrintItems(
                 List<Item> items,
                 bool showIndex = false, // index표시
                 bool showEquip = false, // (E) 표시
@@ -53,6 +53,6 @@
 
                 Console.WriteLine($"{prefix} {equipped}{item.name}{priceLabel}{sellPriceLabel}| ({statLabel} +{item.effect})");
             }
-        }*/
+        }
     }
 }

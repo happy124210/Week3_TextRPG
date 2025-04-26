@@ -98,37 +98,51 @@ namespace TextRPG_Team25.Core
 
         public void ShowInventory()  //인벤토리 보기
         {
-            Console.Clear();
-
-            // 테스트용 임시 아이템
-            AddInventory(0);
-            AddInventory(1);
-
-            for(int i = 0; i < inventory.Count; i++)
+            while (true)
             {
-                inventory[i].ShowItem();
-            }
-            Console.WriteLine("장착하실 아이템을 선택해주세요");
-            Console.WriteLine("계속하려면 아무 키나 누르세요...");
-            string inputNumber = Console.ReadLine();
-            bool num = int.TryParse(inputNumber, out int number);
-            if (num)
-            {
-                if (number <= inventory.Count)
+                Console.Clear();
+                Utils.ColoredText("\n[ 인벤토리 목록 ]\n\n", ConsoleColor.DarkCyan);
+
+                for (int i = 0; i < inventory.Count; i++)
                 {
-                    EquipmentItem(inventory[number-1]);
+                    Console.Write($"[{i + 1}] ");
+                    inventory[i].ShowItem();
+                }
+
+                Console.WriteLine();
+                Utils.MenuOption("0", "메인 메뉴로 돌아가기");
+                Console.WriteLine();
+                Console.Write("장착하거나 사용할 아이템 번호를 입력하세요.\n>> ");
+
+                string inputNumber = Console.ReadLine();
+                bool valid = int.TryParse(inputNumber, out int number);
+
+                if (!valid)
+                {
+                    Console.WriteLine("\n잘못된 입력입니다. 아무 키나 누르면 다시 선택할 수 있습니다.");
+                    Console.ReadKey();
+                    continue;
+                }
+
+                if (number == 0)
+                {
+                    Console.WriteLine("\n메인 메뉴로 돌아갑니다!");
+                    Console.ReadKey();
+                    break;
+                }
+
+                if (number >= 1 && number <= inventory.Count)
+                {
+                    EquipmentItem(inventory[number - 1]);
+                    Console.WriteLine("\n계속 장착하거나 나가려면 선택하세요.");
+                    Console.ReadKey();
                 }
                 else
                 {
-                    Console.WriteLine("유효하지 않은 입력입니다. 메인화면으로 돌아갑니다.");
+                    Console.WriteLine("\n유효하지 않은 번호입니다.");
+                    Console.ReadKey();
                 }
             }
-            else
-            { 
-                Console.WriteLine("유효하지 않은 입력입니다., 메인화면으로 돌아갑니다.");
-                Console.ReadKey();
-            }
-            
         }
 
 
@@ -157,68 +171,59 @@ namespace TextRPG_Team25.Core
         }
 
 
-        public void EquipmentManage()
+        public void AddInventory(string id) // 아이디로 아이템 추가
         {
-            Console.WriteLine("장착하거나 해제 하실 장비를 선택하세요");
-            string inputNum = Console.ReadLine();
-            if(!int.TryParse(inputNum, out int input))
+            Item other = Item.GetItem(id);
+            if (other != null)
             {
-                Console.WriteLine("잘못된 입력입니다.");
-                Console.ReadKey();
-            }
-            if (input == 0) 
-            {
-                Console.WriteLine("메인화면으로 돌아갑니다.");
-                Console.ReadKey();
-            }
-            if (inventory[input - 1].type == ItemType.Potion)
-            {
-                Console.WriteLine("포션은 장착하거나 해제할 수 없습니다.");
-                Console.ReadKey();
+                inventory.Add(new Item(other));
             }
             else
             {
-                EquipmentItem(inventory[input - 1]);
+                Console.WriteLine($"[오류] 아이디 '{id}'에 해당하는 아이템을 찾을 수 없습니다.");
             }
         }
 
-        public void AddInventory(int index) // 아이템 획득 시 실행
-        {
-            inventory.Add(Item.AddItem(index));
-        }
 
         private void EquipmentItem(Item item)
         {
             switch (item.type)
             {
-                case ItemType.Weapon:   //플레이어 공격력 증가                  
+                case ItemType.Weapon:   // 무기 장착
                     if (!item.isEquip)
                     {
                         attack += item.effect;
                         item.isEquip = true;
+                        Utils.ColoredText($"{item.name}을(를) 장착했습니다! (공격력 +{item.effect})", ConsoleColor.Green);
                     }
                     else
                     {
                         attack -= item.effect;
                         item.isEquip = false;
+                        Utils.ColoredText($"{item.name}을(를) 해제했습니다! (공격력 -{item.effect})", ConsoleColor.Red);
                     }
                     break;
 
-                case ItemType.Armor:  //플레이어 방어력 증가
+                case ItemType.Armor:    // 방어구 장착
                     if (!item.isEquip)
                     {
                         defense += item.effect;
                         item.isEquip = true;
+                        Utils.ColoredText($"{item.name}을(를) 장착했습니다! (방어력 +{item.effect})", ConsoleColor.Green);
                     }
                     else
                     {
                         defense -= item.effect;
                         item.isEquip = false;
+                        Utils.ColoredText($"{item.name}을(를) 해제했습니다! (방어력 -{item.effect})", ConsoleColor.Red);
                     }
                     break;
 
-                case ItemType.Potion:   //플레이어 체력 증가
+                case ItemType.Potion:   // 포션 사용
                     hp += item.effect;
+                    if (hp > maxHp) hp = maxHp;
+                    Utils.ColoredText($"{item.name}을(를) 사용했습니다! (체력 +{item.effect})", ConsoleColor.Cyan);
+                    inventory.Remove(item); // 포션은 사용하면 인벤토리에서 삭제
                     break;
             }
         }

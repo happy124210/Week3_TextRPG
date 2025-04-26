@@ -9,6 +9,7 @@
         private static GameManager instance;
         public static GameManager Instance => instance ??= new GameManager();
         public Player player;
+        public Shop shop;
         public Battle battle;
         public Quest quest;
         public QuestManager questManager;
@@ -19,8 +20,9 @@
             Console.Write("이름을 입력하세요.\n>> ");
             string name = Console.ReadLine();
 
-            player = new Player();
+            player = new Player(); 
             player.name = name;
+            shop = new Shop();
             battle = new Battle(player);
             quest = new Quest();
             questManager = new QuestManager();
@@ -44,9 +46,10 @@
                 Console.WriteLine("");
                 Utils.MenuOption("1", "내 정보");
                 Utils.MenuOption("2", "인벤토리");
-                Utils.MenuOption("3", "전투");
-                Utils.MenuOption("4", "여관");
-                Utils.MenuOption("5", "퀘스트");
+                Utils.MenuOption("3", "상점");
+                Utils.MenuOption("4", "전투");
+                Utils.MenuOption("5", "여관");
+                Utils.MenuOption("6", "퀘스트");
                 Utils.MenuOption("0", "게임 종료\n");
                 Console.Write("원하시는 행동을 입력해주세요.\n>> ");
 
@@ -62,12 +65,15 @@
                         player.ShowInventory();
                         break;
                     case "3":
-                        battle.StartBattle();
+                        shop.ShowShop(player);
                         break;
                     case "4":
-                        player.hp = 100;
+                        battle.StartBattle();
                         break;
                     case "5":
+                        player.hp = 100;
+                        break;
+                    case "6":
                         quest.ShowQuestList();
                         break;
                     case "0":
