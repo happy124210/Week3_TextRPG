@@ -1,7 +1,7 @@
 ﻿using TextRPG_Team25.Core;
 using TextRPG_Team25.UI;
 
-namespace TextRPG_Team25
+namespace TextRPG_Team25.ItemSystem
 {
 
     public class Shop()
