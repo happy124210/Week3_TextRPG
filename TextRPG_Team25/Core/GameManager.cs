@@ -3,12 +3,14 @@
     using TextRPG_Team25.Quest;
     using TextRPG_Team25.UI;
     using TextRPG_Team25.BattleSystem;
+    using TextRPG_Team25.ItemSystem;
 
     internal class GameManager
     {
         // 싱글톤
         private static GameManager instance;
         public static GameManager Instance => instance ??= new GameManager();
+
         public Player player;
         public Shop shop;
         public Battle battle;
@@ -36,13 +38,12 @@
             player.UpdateStatsBasedOnJob();
             player.SetSkillsByJob();
 
+            // 생성
             shop = new Shop();
             battle = new Battle(player);
             quest = new Quest();
             questManager = new QuestManager();
             questManager.InitQuests();
-            player.UpdateStatsBasedOnJob();
-            player.SetSkillsByJob();
         }
 
         // 게임 실행
@@ -56,21 +57,24 @@
         {
             while (true)
             {
+                // 메뉴 출력부
                 Console.Clear();
-                Console.WriteLine("25조 Text RPG");
-                Console.WriteLine("");
+                Utils.ColoredText("╔════════════════════════════╗\n", ConsoleColor.DarkCyan);
+                Utils.ColoredText("║   TEXT RPG GAME by Team25  ║\n", ConsoleColor.DarkCyan);
+                Utils.ColoredText("╚════════════════════════════╝\n", ConsoleColor.DarkCyan);
+                Console.WriteLine();
                 Utils.MenuOption("1", "내 정보");
                 Utils.MenuOption("2", "인벤토리");
                 Utils.MenuOption("3", "상점");
                 Utils.MenuOption("4", "전투");
                 Utils.MenuOption("5", "여관");
                 Utils.MenuOption("6", "퀘스트");
+                Console.WriteLine();
                 Utils.MenuOption("0", "게임 종료\n");
                 Console.Write("원하시는 행동을 입력해주세요.\n>> ");
 
+                // 입력 처리
                 string input = Console.ReadLine();
-
-
                 switch (input)
                 {
                     case "1":
@@ -87,6 +91,8 @@
                         break;
                     case "5":
                         player.hp = 100;
+                        Console.WriteLine("체력이 회복되었습니다!");
+                        Console.ReadKey();
                         break;
                     case "6":
                         quest.ShowQuestList();

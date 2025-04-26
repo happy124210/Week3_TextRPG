@@ -1,10 +1,13 @@
 ﻿using TextRPG_Team25.BattleSystem;
+using TextRPG_Team25.ItemSystem;
 using TextRPG_Team25.UI;
 
 namespace TextRPG_Team25.Core
 {
     public class Player
     {
+        public Utils utils = new Utils();
+
         public string name = "";
         public string job = "";
 
@@ -83,7 +86,7 @@ namespace TextRPG_Team25.Core
             if (showMana)
             {
                 Console.Write(" 마나     : ");
-                Utils.ColoredText($"{hp} / {maxHp}\n", ConsoleColor.Cyan);
+                Utils.ColoredText($"{mana} / {maxMana}\n", ConsoleColor.Cyan);
             }    
 
             if (showGold)
@@ -102,13 +105,16 @@ namespace TextRPG_Team25.Core
             while (true)
             {
                 Console.Clear();
-                Utils.ColoredText("\n[ 인벤토리 목록 ]\n\n", ConsoleColor.DarkCyan);
+                Utils.ColoredText("[ 인벤토리 목록 ]\n\n", ConsoleColor.DarkCyan);
 
-                for (int i = 0; i < inventory.Count; i++)
+                if (inventory.Count == 0)
                 {
-                    Console.Write($"[{i + 1}] ");
-                    inventory[i].ShowItem();
+                    Console.WriteLine("인벤토리가 비어 있습니다.");
+                    Console.ReadKey();
+                    break;
                 }
+
+                utils.PrintItems(inventory, true, true, false, false);
 
                 Console.WriteLine();
                 Utils.MenuOption("0", "메인 메뉴로 돌아가기");
@@ -152,12 +158,12 @@ namespace TextRPG_Team25.Core
             switch (job)
             {
                 case "검투사":
-                    attack = 11;
-                    defense = 5;
+                    attack = 9;
+                    defense = 6;
                     maxHp = 100;
                     break;
                 case "화염술사":
-                    attack = 13;
+                    attack = 11;
                     defense = 5;
                     maxHp = 60;
                     break;
@@ -241,8 +247,6 @@ namespace TextRPG_Team25.Core
                 hp = 0;
                 Console.WriteLine($"\n{name}이(가) 쓰러졌습니다..."); 
             }
-
-            Console.WriteLine($"HP {hp}");
         }
 
         // 방어력 버프
