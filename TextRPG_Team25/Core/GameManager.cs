@@ -2,6 +2,7 @@
 {
     using TextRPG_Team25.Quest;
     using TextRPG_Team25.UI;
+    using TextRPG_Team25.BattleSystem;
 
     internal class GameManager
     {
@@ -26,6 +27,8 @@
             questManager = new QuestManager();
 
             questManager.InitQuests();
+            player.UpdateStatsBasedOnJob();
+            player.SetSkillsByJob();
         }
 
         // 게임 실행
