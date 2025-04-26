@@ -158,12 +158,12 @@ namespace TextRPG_Team25.Core
             switch (job)
             {
                 case "검투사":
-                    attack = 11;
-                    defense = 5;
+                    attack = 9;
+                    defense = 6;
                     maxHp = 100;
                     break;
                 case "화염술사":
-                    attack = 13;
+                    attack = 11;
                     defense = 5;
                     maxHp = 60;
                     break;
