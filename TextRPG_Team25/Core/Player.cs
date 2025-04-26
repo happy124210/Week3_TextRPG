@@ -104,6 +104,13 @@ namespace TextRPG_Team25.Core
                 Console.Clear();
                 Utils.ColoredText("\n[ 인벤토리 목록 ]\n\n", ConsoleColor.DarkCyan);
 
+                if (inventory.Count == 0)
+                {
+                    Console.WriteLine("인벤토리가 비어 있습니다.");
+                    Console.ReadKey();
+                    break;
+                }
+
                 for (int i = 0; i < inventory.Count; i++)
                 {
                     Console.Write($"[{i + 1}] ");

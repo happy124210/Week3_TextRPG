@@ -185,9 +185,8 @@ namespace TextRPG_Team25.BattleSystem
                     Console.WriteLine($"{monster.name}이(가) ❄️ 빙결 상태로 약화된 공격을 합니다!");
                 }
 
-                // 내 상태 출력
-                Console.WriteLine();
-                player.ShowStatus(showEquipment: false);
+                // 몬스터, 플레이어 출력
+                PrintBattleScreen();
                 Console.WriteLine();
 
                 player.TakeDamage(attack);
@@ -206,7 +205,6 @@ namespace TextRPG_Team25.BattleSystem
 
             if (_isBattle)
             {
-                Console.Clear();
                 Console.WriteLine("\n플레이어 턴으로 돌아갑니다.");
                 Console.ReadKey();
             }
