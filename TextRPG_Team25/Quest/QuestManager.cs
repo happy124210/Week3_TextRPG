@@ -1,6 +1,6 @@
 ﻿namespace TextRPG_Team25.Quest
 {
-    internal class QuestManager
+    public class QuestManager
     {
         public List<Quest> questList = new List<Quest>();
 

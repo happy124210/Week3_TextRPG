@@ -1,6 +1,6 @@
 ﻿namespace TextRPG_Team25.Core
 {
-    internal class Program
+    public class Program
     {
         static void Main()
         {

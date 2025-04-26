@@ -1,8 +1,9 @@
 ﻿using TextRPG_Team25.UI;
 using TextRPG_Team25.Core;
+using TextRPG_Team25.BattleSystem;
 namespace TextRPG_Team25
 {
-    internal class Battle(Player player)
+    public class Battle(Player player)
     {
         private Utils utils = new Utils();
 
@@ -18,41 +19,43 @@ namespace TextRPG_Team25
         {
             Console.Clear();
             fieldMonsters.Clear();
-
             _isBattle = true;
             _isVictory = true;
-
 
             SpawnEnemy();
 
             while (_isBattle)
             {
-                Console.Clear();
-                int deadNum = 0;                              //검사 진행을 위한 변수
-                //몬스터 전원 처치 확인
-                for(int i = 0; i < fieldMonsters.Count; i++)
-                {
-                    if (fieldMonsters[i].isDead) deadNum++;
-                }
-                if(deadNum == fieldMonsters.Count)
+                // 상태이상 및 쿨타임 체크
+                player.OnTurnEnd();
+                foreach (var monster in fieldMonsters)
+                    monster.OnTurnEnd();
+
+                int deadNum = 0;
+
+                // 몬스터 전원 처치 확인
+                if (fieldMonsters.All(m => m.isDead))
                 {
                     _isBattle = false;
                     break;
                 }
-                // 메세지 출력
+
+                Console.WriteLine();
+
+                // 몬스터 상태 출력
                 for (int i = 0; i < fieldMonsters.Count; i++)
                 {
                     var m = fieldMonsters[i];
                     string status = m.isDead ? "Dead" : $"HP {m.hp}";
-                    Console.WriteLine($"{i + 1}. Lv.{m.level} {m.name}  {status}");
+                    ConsoleColor color = m.isDead ? ConsoleColor.DarkGray : ConsoleColor.Gray;
+                    Utils.ColoredText($"[{i + 1}] " , ConsoleColor.Yellow);
+                    Utils.ColoredText($"Lv.{m.level} {m.name}  {status}\n\n", color);
                 }
 
-                Console.WriteLine("");
-                Console.WriteLine("[내정보]");
-                Console.WriteLine($"Lv.{player.level}  {player.name} ({player.job})");
-                Console.WriteLine($"HP {player.hp}/{player.maxHp}\n");
-                Console.WriteLine("0. 취소\n");
-                Console.WriteLine("대상을 선택해주세요.");
+                player.ShowStatus(showGold: false, showEquipment: false);
+                Console.WriteLine();
+                Utils.MenuOption("0", "게임 종료");
+                Console.WriteLine("공격할 대상을 선택해주세요.");
                 Console.Write(">> ");
 
                 string rawInput = Console.ReadLine();
@@ -103,30 +106,43 @@ namespace TextRPG_Team25
 
         private void PlayerPhase(Monster selected)
         {
-            if (IsEvasion()) { Console.WriteLine($"{selected.name} 이(가) 공격을 회피했습니다"); } //공격 성공 여부 판단
-            else //공격 성공시
+            Utils.MenuOption("1", "일반 공격");
+            Utils.MenuOption("2", $"{player.firstSkill.name}");
+            Utils.MenuOption("3", $"{player.secondSkill.name}");
+            Console.Write(">> ");
+            string skillChoice = Console.ReadLine();
+
+            if (skillChoice == "2")
+                player.firstSkill.TryActivate(player, selected);
+            else if (skillChoice == "3")
+                player.secondSkill.TryActivate(player, selected);
+            else
             {
-
-                int baseAttack = player.attack;
-                int currentMonsterHp = selected.hp;
-                int offset = (int)Math.Ceiling(baseAttack * 0.1f);
-                int damage = _random.Next(baseAttack - offset, baseAttack + offset + 1);
-
-                if (IsCritical()) { damage = (int)Math.Ceiling(damage*1.6f) ;  Console.WriteLine("크리티컬 발동!"); } //크리티컬 여부판단
-                selected.hp -= damage;
-
-                Console.WriteLine($"\n{player.name}의 공격!");
-                Console.WriteLine($"{selected.name}을 맞췄습니다. [데미지 : {damage}]");
-                Console.WriteLine($"HP {currentMonsterHp} → {(selected.hp > 0 ? selected.hp.ToString() : "Dead")}");
-
-                if (selected.hp <= 0)
+                if (IsEvasion()) // 공격 실패 시
                 {
-                    selected.hp = 0;
-                    selected.isDead = true;
+                    Console.WriteLine($"{selected.name} 이(가) 공격을 회피했습니다");
                 }
+
+                else //공격 성공 시
+                {
+                    int baseAttack = player.attack;
+                    int offset = (int)Math.Ceiling(baseAttack * 0.1f);
+                    int damage = _random.Next(baseAttack - offset, baseAttack + offset + 1);
+
+                    if (IsCritical())
+                    {
+                        damage = (int)Math.Ceiling(damage * 1.6f);
+                        Console.WriteLine("크리티컬 발동!");
+                    }
+
+                    selected.TakeDamage(damage);
+                    Console.WriteLine($"\n{player.name}의 공격!");
+                    Console.WriteLine($"{selected.name}을 맞췄습니다. [데미지 : {damage}]");
+                }
+
                 Console.WriteLine("몬스터 턴으로 이동합니다.");
                 Console.ReadKey();
-            }   
+            }
         }
 
         private void MonsterPhase()
@@ -138,33 +154,17 @@ namespace TextRPG_Team25
                 int offset = (int)Math.Ceiling(monster.attack * 0.1f);
                 int damage = _random.Next(monster.attack - offset, monster.attack + offset + 1);
 
-                Console.WriteLine($"\nLv.{monster.level} {monster.name}의 공격!");
-                Console.WriteLine($"Lv.{player.level} {player.name}");
-                Console.WriteLine($"HP {player.hp} → {Math.Max(player.hp - damage, 0)}");
-                Console.WriteLine($"받은 피해: {damage}");
-
-                player.hp -= damage;
-
-                if (player.hp <= 0)
+                if (monster.HasStatus(StatusEffect.Freeze))
                 {
-                    player.hp = 0;
-                    Console.WriteLine($"\n{player.name}이(가) 쓰러졌습니다...");
-                    _isBattle = false;
-                    _isVictory = false;
-                    break;
+                    damage = (int)(damage * 0.7f);
+                    Console.WriteLine($"{monster.name}이(가) 빙결 상태로 약하게 공격합니다. ❄️");
                 }
-                Console.ReadKey();
+
+                Console.WriteLine($"Lv.{monster.level} {monster.name}의 공격!");
+                player.TakeDamage(damage);
             }
 
-            if (_isBattle)
-            {
-                Console.WriteLine("플레이어 턴으로 이동합니다.");
-            }
-            else
-            {
-                Console.WriteLine("전투 결과로 이동합니다.");
-            }
-
+            Console.WriteLine("플레이어 턴으로 이동합니다.");
             Console.ReadKey();
         }
 
@@ -190,7 +190,7 @@ namespace TextRPG_Team25
         private void SpawnEnemy()
         {
             int spawnNum = _random.Next(1, 5);
-
+            Console.WriteLine($"[디버깅] {spawnNum}마리 소환 시도");
             for (int i = 0; i < spawnNum; i++)
             {
                 fieldMonsters.Add(Monster.GenerateRandomMonster());
@@ -199,18 +199,12 @@ namespace TextRPG_Team25
 
         private bool IsEvasion()
         {
-            int evasion = _random.Next(1, 101);
-            if (evasion <= 10) { return true; }
-            else { return false; }
+            return _random.Next(1, 101) <= 10;
         }
 
-        private bool IsCritical() 
+        private bool IsCritical()
         {
-            int critical = _random.Next(1, 101);
-            if (critical <= 15) { return true; }
-            else { return false; }
+            return _random.Next(1, 101) <= 15;
         }
-
-        
     }
 }

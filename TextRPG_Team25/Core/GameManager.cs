@@ -56,7 +56,7 @@
                 switch (input)
                 {
                     case "1":
-                        player.ShowStatus();
+                        player.StatusMenu();
                         break;
                     case "2":
                         player.ShowInventory();
