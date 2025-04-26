@@ -20,25 +20,25 @@ namespace TextRPG_Team25.BattleSystem
         }
 
         // 스킬 사용 가능 여부 체크
-        public void TryActivate(Player user, Monster target)
+        public bool TryActivate(Player user, Monster target)
         {
-            if (currentCooldown > 0) // 쿨타임 체크
+            if (currentCooldown > 0)
             {
-                Console.WriteLine($"아직 사용할 수 없습니다.");
-                return;
+                Console.WriteLine("아직 사용할 수 없습니다.");
+                return false;
             }
 
-            if (user.mana < manaCost) // 마나 체크
+            if (user.mana < manaCost)
             {
                 Utils.ColoredText("마나가 부족합니다.", ConsoleColor.DarkRed);
-                return;
+                return false;
             }
 
-            // 스킬 사용
             user.mana -= manaCost;
             currentCooldown = cooldown;
 
             ActivateEffect(user, target);
+            return true;
         }
 
 
