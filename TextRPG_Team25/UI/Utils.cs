@@ -53,7 +53,8 @@ namespace TextRPG_Team25.UI
                 string statLabel = item.type == ItemType.Weapon ? "공격력" : "방어력";
                 string equipped = showEquip && item.isEquip ? "(E) " : "";
 
-                Console.WriteLine($"{prefix} {equipped}{item.name}{priceLabel}{sellPriceLabel}| ({statLabel} +{item.effect})");
+                ColoredText($"{prefix} ", ConsoleColor.Yellow);
+                Console.WriteLine($"{equipped}{item.name}{priceLabel}{sellPriceLabel}| ({statLabel} +{item.effect})");
             }
         }
     }

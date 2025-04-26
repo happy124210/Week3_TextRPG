@@ -51,36 +51,6 @@
             new Item("3", "포션", 5, ItemType.Potion, false, false, 0),
         };
 
-        
-        public void ShowItem()
-        {
-            string itemName = "";
-            switch (type)
-            {
-                case ItemType.Weapon:
-                    itemName = "공격력";
-                    break;
-                case ItemType.Armor:
-                    itemName = "방어력";
-                    break;
-                case ItemType.Potion:
-                    itemName = "포션";
-                    break;
-            }
-
-            if (isEquip)
-            {
-                Console.WriteLine($"[장착중] {name}   {itemName} : +{effect}");
-            }
-
-            else
-            {
-                Console.WriteLine($"{name}   {itemName} : +{effect}");
-            }
-
-
-        }
-
         public static Item GetItem(string id)
         {
             Item foundItem = items.FirstOrDefault(item => item.id == id);

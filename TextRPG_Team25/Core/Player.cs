@@ -6,6 +6,8 @@ namespace TextRPG_Team25.Core
 {
     public class Player
     {
+        public Utils utils = new Utils();
+
         public string name = "";
         public string job = "";
 
@@ -103,7 +105,7 @@ namespace TextRPG_Team25.Core
             while (true)
             {
                 Console.Clear();
-                Utils.ColoredText("\n[ 인벤토리 목록 ]\n\n", ConsoleColor.DarkCyan);
+                Utils.ColoredText("[ 인벤토리 목록 ]\n\n", ConsoleColor.DarkCyan);
 
                 if (inventory.Count == 0)
                 {
@@ -112,11 +114,7 @@ namespace TextRPG_Team25.Core
                     break;
                 }
 
-                for (int i = 0; i < inventory.Count; i++)
-                {
-                    Console.Write($"[{i + 1}] ");
-                    inventory[i].ShowItem();
-                }
+                utils.PrintItems(inventory, true, true, false, false);
 
                 Console.WriteLine();
                 Utils.MenuOption("0", "메인 메뉴로 돌아가기");
