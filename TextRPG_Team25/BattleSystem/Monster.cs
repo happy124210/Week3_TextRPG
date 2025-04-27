@@ -15,7 +15,7 @@
             (new Monster { name = "미니언", level = 2, hp = 50, attack = 5 }, 30),
             (new Monster { name = "공허충", level = 3, hp = 45, attack = 8 }, 25),
             (new Monster { name = "대포미니언", level = 5, hp = 80, attack = 10 }, 25),
-            (new Monster { name = "바론 나셔", level = 10, hp = 500, attack = 50 }, 5),
+            (new Monster { name = "내셔 남작", level = 10, hp = 500, attack = 50 }, 5),
             (new Monster { name = "드래곤", level = 7, hp = 300, attack = 35 }, 5),
             (new Monster { name = "협곡의 전령", level = 8, hp = 400, attack = 40 }, 3),
             (new Monster { name = "붉은 덩굴 정령", level = 5, hp = 200, attack = 20 }, 4),
@@ -57,7 +57,6 @@
             {
                 hp = 0;
                 isDead = true;
-                statusEffects.Clear();
             }
         }
 
@@ -74,7 +73,7 @@
         }
 
         // 턴 끝난 후 처리
-        public void OnTurnEnd()
+        public void OnTurnStart()
         {
             if (isDead) return;
 
@@ -107,6 +106,11 @@
             {
                 statusEffects.Remove(e);
                 Console.WriteLine($"{name}의 {e} 상태이상이 해제되었습니다.");
+            }
+
+            if (isDead)
+            {
+                statusEffects.Clear();
             }
         }
 

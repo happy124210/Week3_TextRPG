@@ -90,7 +90,8 @@
                         battle.StartBattle();
                         break;
                     case "5":
-                        player.hp = 100;
+                        player.hp = player.maxHp;
+                        player.mana = player.maxMana;
                         Console.WriteLine("체력이 회복되었습니다!");
                         Console.ReadKey();
                         break;

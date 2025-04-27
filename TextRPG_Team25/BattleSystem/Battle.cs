@@ -1,4 +1,5 @@
-﻿using TextRPG_Team25.Core;
+﻿using System;
+using TextRPG_Team25.Core;
 using TextRPG_Team25.UI;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -7,7 +8,7 @@ namespace TextRPG_Team25.BattleSystem
     public class Battle
     {
         private Player player;
-        private List<Monster> fieldmonsterPool = new List<Monster>();
+        private List<Monster> fieldMonsters = new List<Monster>();
         private bool isBattle;
         private bool isVictory;
         private Random random = new Random();
@@ -23,7 +24,7 @@ namespace TextRPG_Team25.BattleSystem
             Console.Clear();
             
             // 초기 세팅
-            fieldmonsterPool.Clear();
+            fieldMonsters.Clear();
             SpawnMonsters();
             isBattle = true;
             isVictory = true;
@@ -34,7 +35,7 @@ namespace TextRPG_Team25.BattleSystem
                 Console.Clear();
                 HandleTurnStart();
 
-                if (fieldmonsterPool.All(m => m.isDead))
+                if (fieldMonsters.All(m => m.isDead))
                 {
                     isBattle = false;
                     break;
@@ -54,10 +55,10 @@ namespace TextRPG_Team25.BattleSystem
         // 턴 시작 시 플레이어, 몬스터 상태이상 확인
         private void HandleTurnStart()
         {
-            player.OnTurnEnd();
-            foreach (var monster in fieldmonsterPool)
+            player.OnTurnStart();
+            foreach (var monster in fieldMonsters)
             {
-                monster.OnTurnEnd();
+                monster.OnTurnStart();
             }
         }
 
@@ -66,9 +67,9 @@ namespace TextRPG_Team25.BattleSystem
         {
             Utils.ColoredText("[ 전투 상황 ]\n", ConsoleColor.DarkCyan);
 
-            for (int i = 0; i < fieldmonsterPool.Count; i++)
+            for (int i = 0; i < fieldMonsters.Count; i++)
             {
-                var m = fieldmonsterPool[i];
+                var m = fieldMonsters[i];
                 string status = m.isDead ? "Dead" : $"HP {m.hp}";
                 ConsoleColor color = m.isDead ? ConsoleColor.DarkGray : ConsoleColor.Gray;
                 Utils.ColoredText($"[{i + 1}] Lv.{m.level} {m.name} {status}\n", color);
@@ -102,7 +103,7 @@ namespace TextRPG_Team25.BattleSystem
                 int targetIndex = SelectTarget();
                 if (targetIndex == -1) continue;
 
-                var target = fieldmonsterPool[targetIndex];
+                var target = fieldMonsters[targetIndex];
                 if (target.isDead)
                 {
                     Console.WriteLine("이미 죽은 몬스터입니다.");
@@ -129,7 +130,7 @@ namespace TextRPG_Team25.BattleSystem
                         continue;
                 }
 
-                // 마나 부족하거나 쿨타임 남으면 damage = -1 반환됨
+                // 마나 부족, 쿨타임 부족 시 damage = -1 반환됨
                 if (damage < 0)
                 {
                     Console.WriteLine("\n행동에 실패했습니다. 다시 선택하세요.");
@@ -155,7 +156,7 @@ namespace TextRPG_Team25.BattleSystem
             if (int.TryParse(rawInput, out int selection))
             {
                 selection--;
-                if (selection >= 0 && selection < fieldmonsterPool.Count)
+                if (selection >= 0 && selection < fieldMonsters.Count)
                     return selection;
             }
 
@@ -171,6 +172,21 @@ namespace TextRPG_Team25.BattleSystem
             int offset = (int)Math.Ceiling(baseAttack * 0.1f);
             int damage = random.Next(baseAttack - offset, baseAttack + offset + 1);
 
+            // 회피 판정
+            if (IsEvasion())
+            {
+                Utils.ColoredText($"{target.name}이(가) 공격을 회피했습니다!\n", ConsoleColor.Yellow);
+                return 0; // 공격 실패
+            }
+
+            // 치명타 판정
+            if (IsCritical())
+            {
+                damage = (int)Math.Ceiling(damage * 1.6f);
+                Utils.ColoredText("크리티컬 발동!!\n", ConsoleColor.Red);
+            }
+
+            // 데미지 적용
             target.TakeDamage(damage);
 
             return damage;
@@ -179,7 +195,7 @@ namespace TextRPG_Team25.BattleSystem
         // 몬스터 턴
         private void MonsterPhase()
         {
-            foreach (var monster in fieldmonsterPool)
+            foreach (var monster in fieldMonsters)
             {
                 if (monster.isDead) continue;
 
@@ -226,7 +242,7 @@ namespace TextRPG_Team25.BattleSystem
             if (isVictory)
             {
                 Utils.ColoredText("Victory!!\n", ConsoleColor.Green);
-                Console.WriteLine($"던전에서 {fieldmonsterPool.Count}마리의 몬스터를 처치했습니다!");
+                Console.WriteLine($"던전에서 {fieldMonsters.Count}마리의 몬스터를 처치했습니다!");
             }
             else
             {
@@ -244,8 +260,20 @@ namespace TextRPG_Team25.BattleSystem
 
             for (int i = 0; i < spawnNum; i++)
             {
-                fieldmonsterPool.Add(Monster.GenerateRandomMonster());
+                fieldMonsters.Add(Monster.GenerateRandomMonster());
             }
+        }
+
+        private bool IsEvasion()
+        {
+            int evasion = random.Next(1, 101);
+            return evasion <= 10;
+        }
+
+        private bool IsCritical()
+        {
+            int critical = random.Next(1, 101);
+            return critical <= 15;
         }
     }
 }

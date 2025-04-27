@@ -258,7 +258,7 @@ namespace TextRPG_Team25.Core
         }
 
 
-        public void OnTurnEnd()
+        public void OnTurnStart()
         {
             if (_activeDefenseBuffTurns > 0)
             {
