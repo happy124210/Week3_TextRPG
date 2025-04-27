@@ -269,6 +269,9 @@ namespace TextRPG_Team25.Core
                     Console.WriteLine("버프가 사라졌습니다.");
                 }
             }
+
+            firstSkill.ReduceCooldown();
+            secondSkill.ReduceCooldown();
         }
 
 

@@ -129,7 +129,8 @@ namespace TextRPG_Team25.BattleSystem
                         continue;
                 }
 
-                if (damage <= 0)
+                // 마나 부족하거나 쿨타임 남으면 damage = -1 반환됨
+                if (damage < 0)
                 {
                     Console.WriteLine("\n행동에 실패했습니다. 다시 선택하세요.");
                     Console.ReadKey();

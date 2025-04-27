@@ -27,13 +27,13 @@ namespace TextRPG_Team25.BattleSystem
             if (currentCooldown > 0)
             {
                 Console.WriteLine("아직 사용할 수 없습니다.");
-                return 0;
+                return -1;
             }
 
             if (user.mana < manaCost)
             {
                 Utils.ColoredText("마나가 부족합니다.", ConsoleColor.DarkRed);
-                return 0;
+                return -1;
             }
 
             user.mana -= manaCost;
