@@ -1,7 +1,5 @@
-﻿using System;
-using TextRPG_Team25.Core;
+﻿using TextRPG_Team25.Core;
 using TextRPG_Team25.UI;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TextRPG_Team25.BattleSystem
 {
@@ -65,7 +63,6 @@ namespace TextRPG_Team25.BattleSystem
         // 배틀 UI 출력
         private void PrintBattleScreen()
         {
-            Console.Clear();
             Utils.ColoredText("[ 전투 상황 ]\n\n", ConsoleColor.DarkCyan);
 
             for (int i = 0; i < fieldMonsters.Count; i++)
