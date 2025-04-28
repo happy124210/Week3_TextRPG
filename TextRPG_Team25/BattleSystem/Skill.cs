@@ -26,13 +26,18 @@ namespace TextRPG_Team25.BattleSystem
         {
             if (currentCooldown > 0)
             {
-                Console.WriteLine("아직 사용할 수 없습니다.");
+                Utils.ColoredText("아직 사용할 수 없습니다.", ConsoleColor.Red);
+                Console.Write("남은 쿨타임: ");
+                Utils.ColoredText($"{currentCooldown}", ConsoleColor.Cyan);
+                Console.WriteLine("턴\n");
                 return -1;
             }
 
             if (user.mana < manaCost)
             {
-                Utils.ColoredText("마나가 부족합니다.", ConsoleColor.DarkRed);
+                Utils.ColoredText("아직 사용할 수 없습니다.", ConsoleColor.Red);
+                Console.Write("필요 마나: ");
+                Utils.ColoredText($"{manaCost}\n\n", ConsoleColor.Cyan);
                 return -1;
             }
 

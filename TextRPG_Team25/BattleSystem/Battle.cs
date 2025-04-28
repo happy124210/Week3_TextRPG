@@ -83,10 +83,18 @@ namespace TextRPG_Team25.BattleSystem
         {
             while (true)
             {
+                // 행동 선택 메뉴 출력
                 Console.WriteLine("[플레이어 행동 선택]");
                 Utils.MenuOption("1", "일반 공격");
+
                 Utils.MenuOption("2", player.firstSkill.name);
+                Console.Write($"{player.firstSkill.description} - 필요 마나: ");
+                Utils.ColoredText($"{player.firstSkill.manaCost}\n", ConsoleColor.Cyan);
+
                 Utils.MenuOption("3", player.secondSkill.name);
+                Console.Write($"{player.secondSkill.description} - 필요 마나: ");
+                Utils.ColoredText($"{player.secondSkill.manaCost}\n", ConsoleColor.Cyan);
+
                 Utils.MenuOption("0", "도망치기");
                 Console.Write("\n>> ");
 
