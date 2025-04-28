@@ -1,4 +1,7 @@
-﻿namespace TextRPG_Team25.Core
+﻿using TextRPG_Team25.Core;
+using TextRPG_Team25.UI;
+
+namespace TextRPG_Team25.Core
 {
     internal class JobMenu
     {
@@ -15,10 +18,10 @@
             {
                 Console.Clear();
                 Console.WriteLine("직업을 선택하세요:\n");
-                Console.WriteLine("1. 검투사 - 강철의 심장을 지닌 근접 전사, 맨 앞에서 적을 짓밟는다.");
-                Console.WriteLine("2. 화염술사 - 모든 것을 태워버리는 불꽃의 인도자, 열기로 적을 압도한다.");
-                Console.WriteLine("3. 얼음술사 - 차가운 침묵 속에 적의 움직임을 봉인하는 냉기의 지배자.\n");
-                Console.WriteLine("0. 나가기\n");
+                Utils.MenuOption("1", "검투사 - 강철의 심장을 지닌 근접 전사, 맨 앞에서 적을 짓밟는다.");
+                Utils.MenuOption("2", "화염술사 - 모든 것을 태워버리는 불꽃의 인도자, 열기로 적을 압도한다.");
+                Utils.MenuOption("3", "얼음술사 - 차가운 침묵 속에 적의 움직임을 봉인하는 냉기의 지배자.\n");
+                Utils.MenuOption("0", "나가기\n");
                 Console.Write(">> ");
 
                 string input = Console.ReadLine();
