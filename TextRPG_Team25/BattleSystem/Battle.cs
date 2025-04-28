@@ -65,7 +65,8 @@ namespace TextRPG_Team25.BattleSystem
         // 배틀 UI 출력
         private void PrintBattleScreen()
         {
-            Utils.ColoredText("[ 전투 상황 ]\n", ConsoleColor.DarkCyan);
+            Console.Clear();
+            Utils.ColoredText("[ 전투 상황 ]\n\n", ConsoleColor.DarkCyan);
 
             for (int i = 0; i < fieldMonsters.Count; i++)
             {
